@@ -1,17 +1,23 @@
 package cutalab.pagamenti;
 
+import cutalab.pagamenti.models.ServiceEntity;
 import cutalab.pagamenti.models.UserEntity;
+import cutalab.pagamenti.repositories.ServiceRepository;
 import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Optional;
+import net.minidev.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,6 +26,9 @@ public class PagamentiController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private ServiceRepository serviceRepository;
     
     @PostMapping("/validate")
     public ResponseEntity validateService(@RequestParam String token) {
@@ -62,6 +71,15 @@ public class PagamentiController {
         }
         String token = buildToken(user.getId());
         return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+    
+    @GetMapping("/personal_data/list")
+    public ResponseEntity personalDataList(@RequestParam String token) {
+        if(!validate(token)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        List<ServiceEntity> list = serviceRepository.findAll();
+        return new ResponseEntity<>(JSONArray.toJSONString(list), HttpStatus.OK);
     }
     
     public String buildToken(Integer userId) {
