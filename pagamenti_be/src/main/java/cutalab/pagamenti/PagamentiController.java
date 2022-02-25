@@ -37,7 +37,7 @@ public class PagamentiController {
         if(!password1.equals(password2)) {
             return new ResponseEntity("Errore. La password non coincidono.", HttpStatus.BAD_REQUEST);
         }
-        String encryptedPassword = AES.encrypt(password1, AES.KEY);
+        String encryptedPassword = CryptoUtil.encrypt(password1);
         UserEntity user = new UserEntity();
         user.setName(name);
         user.setEmail(email);
@@ -55,7 +55,7 @@ public class PagamentiController {
         if(email.isEmpty() || password.isEmpty()) {
             return new ResponseEntity("Errore. Campi vuoti.", HttpStatus.BAD_REQUEST);
         }
-        String encryptedPassword = AES.encrypt(password, AES.KEY);
+        String encryptedPassword = CryptoUtil.encrypt(password);
         UserEntity user = userRepository.findByEmailAndPassword(email, encryptedPassword);
         if(user == null) {
             return new ResponseEntity("Utente non trovato.", HttpStatus.BAD_REQUEST);
@@ -71,15 +71,15 @@ public class PagamentiController {
         long d2 = now.plusYears(1).toEpochSecond(ZoneOffset.UTC);
         long d3 = now.plusDays(3).toEpochSecond(ZoneOffset.UTC);                //data di scadenza
         long d4 = now.minusDays(3).toEpochSecond(ZoneOffset.UTC);
-        String originalString = d0+"#"+userId+"#"+d1+"#"+d2+"#"+d3+"#"+d4;
-        String token = AES.encrypt(originalString, AES.KEY);
+        String originalString = d0+"cuta"+userId+"cuta"+d1+"cuta"+d2+"cuta"+d3+"cuta"+d4;
+        String token = CryptoUtil.encrypt(originalString);
         return token;
     }
     
     public boolean validate(String token) {
         boolean retval = false;
-        String tokenDecrypted = AES.decrypt(token, AES.KEY);
-        String[] split = tokenDecrypted.split("#");
+        String tokenDecrypted = CryptoUtil.decrypt(token);
+        String[] split = tokenDecrypted.split("cuta");
         Integer userId = Integer.valueOf(split[1]);
         LocalDateTime date = LocalDateTime.now();
         long now = date.toEpochSecond(ZoneOffset.UTC);                          //data attuale (confronto)  
