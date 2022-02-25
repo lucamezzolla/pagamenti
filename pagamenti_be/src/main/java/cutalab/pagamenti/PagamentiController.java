@@ -2,6 +2,9 @@ package cutalab.pagamenti;
 
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.UserRepository;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,14 @@ public class PagamentiController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @PostMapping("/validate")
+    public ResponseEntity validateService(@RequestParam String token) {
+        if(!validate(token)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
     
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestParam String name, @RequestParam String email, @RequestParam String password1, @RequestParam String password2) {
@@ -49,8 +60,35 @@ public class PagamentiController {
         if(user == null) {
             return new ResponseEntity("Utente non trovato.", HttpStatus.BAD_REQUEST);
         }
-        String token = Login.buildToken(user.getId());
+        String token = buildToken(user.getId());
         return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+    
+    public String buildToken(Integer userId) {
+        LocalDateTime now = LocalDateTime.now();
+        long d0 = now.toEpochSecond(ZoneOffset.UTC);                            //data attuale (login)
+        long d1 = now.minusYears(1).toEpochSecond(ZoneOffset.UTC);
+        long d2 = now.plusYears(1).toEpochSecond(ZoneOffset.UTC);
+        long d3 = now.plusDays(3).toEpochSecond(ZoneOffset.UTC);                //data di scadenza
+        long d4 = now.minusDays(3).toEpochSecond(ZoneOffset.UTC);
+        String originalString = d0+"#"+userId+"#"+d1+"#"+d2+"#"+d3+"#"+d4;
+        String token = AES.encrypt(originalString, AES.KEY);
+        return token;
+    }
+    
+    public boolean validate(String token) {
+        boolean retval = false;
+        String tokenDecrypted = AES.decrypt(token, AES.KEY);
+        String[] split = tokenDecrypted.split("#");
+        Integer userId = Integer.valueOf(split[1]);
+        LocalDateTime date = LocalDateTime.now();
+        long now = date.toEpochSecond(ZoneOffset.UTC);                          //data attuale (confronto)  
+        long expirationDate = Long.valueOf(split[4]);                           //data di scadenza token
+        Optional<UserEntity> user = userRepository.findById(userId);
+        if(now < expirationDate && user != null) {
+            retval = true;                                                      //autorizzato        
+        }
+        return retval;
     }
 
 }
