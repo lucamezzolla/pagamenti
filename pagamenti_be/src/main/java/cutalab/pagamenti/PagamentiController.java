@@ -1,7 +1,7 @@
 package cutalab.pagamenti;
 
 import cutalab.pagamenti.models.ClientEntity;
-import cutalab.pagamenti.models.ServiceEntity;
+import cutalab.pagamenti.models.ClientListReduced;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.ClientRepository;
 import cutalab.pagamenti.repositories.ServiceRepository;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -83,8 +82,8 @@ public class PagamentiController {
         if(!validate(token)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        List<ClientEntity> list = clientRepository.findAll();
-        return new ResponseEntity<>(JSONArray.toJSONString(list), HttpStatus.OK);
+        List<ClientListReduced> list = clientRepository.selectReducedList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
     
     public String buildToken(Integer userId) {
