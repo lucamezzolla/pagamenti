@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 
 @Entity
 @Table(name="clients")
@@ -18,10 +16,6 @@ public class ClientEntity implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne()
-    @JoinColumn(referencedColumnName="id", name="payment_id", insertable=false, updatable=false, nullable=false)
-    private PaymentEntity payment;
-    
     @Column(name="name", nullable=false)
     private String name;
     
@@ -41,7 +35,7 @@ public class ClientEntity implements Serializable {
     private String state;
     
     @Column(name="piva", nullable=true)
-    private String pIva;
+    private String partitaIva;
     
     @Column(name="fiscal_code", nullable=true)
     private String fiscalCode;
@@ -55,14 +49,6 @@ public class ClientEntity implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public PaymentEntity getPayment() {
-        return payment;
-    }
-
-    public void setPayment(PaymentEntity payment) {
-        this.payment = payment;
     }
 
     public String getName() {
@@ -113,12 +99,12 @@ public class ClientEntity implements Serializable {
         this.state = state;
     }
 
-    public String getpIva() {
-        return pIva;
+    public String getPartitaIva() {
+        return partitaIva;
     }
 
-    public void setpIva(String pIva) {
-        this.pIva = pIva;
+    public void setPartitaIva(String partitaIva) {
+        this.partitaIva = partitaIva;
     }
 
     public String getFiscalCode() {

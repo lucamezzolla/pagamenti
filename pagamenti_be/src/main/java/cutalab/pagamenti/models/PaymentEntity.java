@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 @Table(name="payments")
@@ -20,9 +20,13 @@ public class PaymentEntity implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(referencedColumnName="id", insertable=false, updatable=false, name="service_id", nullable=false)
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(referencedColumnName="id", name="service_id", insertable=true, updatable=true, nullable=false)
     private ServiceEntity service;
+    
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(referencedColumnName="id", name="client_id", insertable=true, updatable=true, nullable=false)
+    private ClientEntity payment;
     
     @Column(name="payment_date", nullable=false)
     private LocalDateTime paymentDateTime;

@@ -1,7 +1,9 @@
 package cutalab.pagamenti;
 
+import cutalab.pagamenti.models.ClientEntity;
 import cutalab.pagamenti.models.ServiceEntity;
 import cutalab.pagamenti.models.UserEntity;
+import cutalab.pagamenti.repositories.ClientRepository;
 import cutalab.pagamenti.repositories.ServiceRepository;
 import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDateTime;
@@ -29,6 +31,9 @@ public class PagamentiController {
     
     @Autowired
     private ServiceRepository serviceRepository;
+    
+    @Autowired
+    private ClientRepository clientRepository;
     
     @PostMapping("/validate")
     public ResponseEntity validateService(@RequestParam String token) {
@@ -78,7 +83,7 @@ public class PagamentiController {
         if(!validate(token)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        List<ServiceEntity> list = serviceRepository.findAll();
+        List<ClientEntity> list = clientRepository.findAll();
         return new ResponseEntity<>(JSONArray.toJSONString(list), HttpStatus.OK);
     }
     
