@@ -37,7 +37,6 @@ function goto(page) {
 }
 
 function createTableClients(responseText) {
-    console.log(responseText);
     var json = JSON.parse(responseText);
     let text = "";
     for (var i = 0; i < json.length; i++) {
