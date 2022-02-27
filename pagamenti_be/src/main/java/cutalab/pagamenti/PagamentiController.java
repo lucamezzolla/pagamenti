@@ -1,5 +1,6 @@
 package cutalab.pagamenti;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import cutalab.pagamenti.models.ClientEntity;
 import cutalab.pagamenti.models.ClientListReduced;
 import cutalab.pagamenti.models.UserEntity;
@@ -10,13 +11,16 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -85,6 +89,19 @@ public class PagamentiController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
     
+    @GetMapping("/personal_data/view")
+    public ResponseEntity personalDataView(@RequestParam String token, @RequestParam Integer id) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            Optional<ClientEntity> c = clientRepository.findById(id);
+            return new ResponseEntity<>(c.get(), HttpStatus.OK);
+        } catch(IllegalArgumentException ex) {
+            return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
+        }
+    }
+    
     @PostMapping("/personal_data/create")
     public ResponseEntity personalDataCreate(
             @RequestParam String token,
@@ -123,9 +140,76 @@ public class PagamentiController {
             c.setPhone(phone);
             c.setCell(cell);
             c.setEmail(email);
+            c.setCode(code);
             clientRepository.save(c);
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @PutMapping("/personal_data/update")
+    public ResponseEntity personalDataUpdate(
+            @RequestParam String token,
+            @RequestParam Integer id,
+            @RequestParam String name,
+            @RequestParam String address,
+            @RequestParam String cap,
+            @RequestParam String city,       
+            @RequestParam String state,
+            @RequestParam String country,
+            @RequestParam String fiscal_code,
+            @RequestParam String piva,
+            @RequestParam String phone,
+            @RequestParam String cell,
+            @RequestParam String email,
+            @RequestParam String code
+            ) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            if(name.isEmpty() || fiscal_code.isEmpty()) {
+                return new ResponseEntity("Errore. Il nome e il codice fiscale sono richiesti.", HttpStatus.BAD_REQUEST);
+            }
+            if(piva.isEmpty()) {
+                piva = "00000000000";
+            }
+            ClientEntity c = clientRepository.getById(id);
+            c.setName(name);
+            c.setAddress(address);
+            c.setCap(cap);
+            c.setCity(city);
+            c.setState(state);
+            c.setCountry(country);
+            c.setFiscalCode(fiscal_code.toUpperCase());
+            c.setPartitaIva(piva);
+            c.setPhone(phone);
+            c.setCell(cell);
+            c.setEmail(email);
+            c.setCode(code);
+            clientRepository.save(c);
+        } catch(IllegalArgumentException ex) {
+            return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
+        } catch(DataAccessException ex) {
+            return new ResponseEntity<>("Errore. Accertarsi che tutti i campi siano stati compilati correttamente.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/personal_data/delete")
+    public ResponseEntity personalDataDelete(
+            @RequestParam String token,
+            @RequestParam Integer id
+            ) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            ClientEntity c = clientRepository.getById(id);
+            clientRepository.deleteById(id);
+        } catch(Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
