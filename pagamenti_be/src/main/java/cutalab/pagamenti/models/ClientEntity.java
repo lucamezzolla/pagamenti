@@ -16,31 +16,40 @@ public class ClientEntity implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="name", nullable=false)
+    @Column(name="name", columnDefinition = "varchar(80)")
     private String name;
     
-    @Column(name="address", nullable=true)
+    @Column(name="address", columnDefinition = "varchar(80)")
     private String address;
     
-    @Column(name="cap", nullable=true)
+    @Column(name="cap", columnDefinition = "varchar(5)")
     private String cap;
     
-    @Column(name="country", nullable=true)
+    @Column(name="country", columnDefinition = "varchar(30)")
     private String country;
-    
-    @Column(name="city", nullable=true)
+
+    @Column(name="city", columnDefinition = "varchar(30)")
     private String city;
     
-    @Column(name="state", nullable=true)
+    @Column(name="state", columnDefinition = "varchar(2)")
     private String state;
     
-    @Column(name="piva", nullable=true)
+    @Column(name="piva", columnDefinition = "varchar(25)")
     private String partitaIva;
     
-    @Column(name="fiscal_code", nullable=true)
+    @Column(name="fiscal_code", columnDefinition = "varchar(30)")
     private String fiscalCode;
     
-    @Column(name="code", nullable=true)
+    @Column(name="phone", columnDefinition = "varchar(30)")
+    private String phone;
+    
+    @Column(name="cell", columnDefinition = "varchar(30)")
+    private String cell;
+    
+    @Column(name="email", columnDefinition = "varchar(50)")
+    private String email;
+
+    @Column(name="code", columnDefinition = "varchar(255)")
     private String code;
 
     public Integer getId() {
@@ -115,6 +124,30 @@ public class ClientEntity implements Serializable {
         this.fiscalCode = fiscalCode;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getCell() {
+        return cell;
+    }
+
+    public void setCell(String cell) {
+        this.cell = cell;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
     public String getCode() {
         return code;
     }

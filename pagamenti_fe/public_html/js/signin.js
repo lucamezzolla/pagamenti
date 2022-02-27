@@ -23,8 +23,8 @@ function send() {
             localStorage.setItem("token", token);
             window.location.href = indexPath;
         } else {
-            var errorMessage = xhr.responseText === "" ? "Errore di connessione al server." : xhr.responseText;
-            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert'>"+errorMessage+"</div>";
+            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>"+errorMessage+"</div>";
             errorComponent.style.display = "block";
         }
     }

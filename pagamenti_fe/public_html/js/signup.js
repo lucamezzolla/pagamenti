@@ -23,7 +23,8 @@ function send() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             window.location.href = indexPath;
         } else {
-            errorComponent.innerHTML = xhr.responseText;
+            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+            errorComponent.innerHTML = errorMessage;
             errorComponent.style.display = "block";
         }
     }

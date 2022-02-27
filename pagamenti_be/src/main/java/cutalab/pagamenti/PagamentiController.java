@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
-import net.minidev.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -84,6 +83,51 @@ public class PagamentiController {
         }
         List<ClientListReduced> list = clientRepository.selectReducedList();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    
+    @PostMapping("/personal_data/create")
+    public ResponseEntity personalDataCreate(
+            @RequestParam String token,
+            @RequestParam String name,
+            @RequestParam String address,
+            @RequestParam String cap,
+            @RequestParam String city,       
+            @RequestParam String state,
+            @RequestParam String country,
+            @RequestParam String fiscal_code,
+            @RequestParam String piva,
+            @RequestParam String phone,
+            @RequestParam String cell,
+            @RequestParam String email,
+            @RequestParam String code
+            ) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            if(name.isEmpty() || fiscal_code.isEmpty()) {
+                return new ResponseEntity("Errore. Il nome e il codice fiscale sono richiesti.", HttpStatus.BAD_REQUEST);
+            }
+            if(piva.isEmpty()) {
+                piva = "00000000000";
+            }
+            ClientEntity c = new ClientEntity();
+            c.setName(name);
+            c.setAddress(address);
+            c.setCap(cap);
+            c.setCity(city);
+            c.setState(state);
+            c.setCountry(country);
+            c.setFiscalCode(fiscal_code.toUpperCase());
+            c.setPartitaIva(piva);
+            c.setPhone(phone);
+            c.setCell(cell);
+            c.setEmail(email);
+            clientRepository.save(c);
+        } catch(IllegalArgumentException ex) {
+            return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     
     public String buildToken(Integer userId) {

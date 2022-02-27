@@ -13,6 +13,8 @@
             <center>
                 <h1>Anagrafiche</h1>
                 <hr />
+                <div id="success" style="display: none"></div>
+                <div id="error" style="display: none"></div>
                 <button type="button" class="btn btn-link" style="padding-left: 0.5rem; float: left" onclick="history.back()">Torna indietro</button>
                 <table class="table table-striped">
                     <thead>
@@ -48,61 +50,61 @@
                         <div class="row g-2">
                             <div class="col-md">
                                 <div class="mb-3">
-                                    <label for="exampleInputName" class="form-label">Nome</label>
-                                    <input type="text" class="form-control" id="exampleInputName" autocomplete="new-password" />
+                                    <label for="clientName" class="form-label">Nome</label>
+                                    <input type="text" tabindex="1" class="form-control" id="clientName" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputCap" class="form-label">CAP</label>
-                                    <input type="text" class="form-control" id="exampleInputCap" autocomplete="new-password" />
+                                    <label for="clientCap" class="form-label">CAP</label>
+                                    <input tabindex="3" type="text" class="form-control" id="clientCap" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputState" class="form-label">Provincia</label>
-                                    <input type="text" class="form-control" id="exampleInputState" autocomplete="new-password" />
+                                    <label for="clientState" class="form-label">Provincia</label>
+                                    <input tabindex="5" type="text" class="form-control" id="clientState" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputFiscalCode" class="form-label">Codice fiscale</label>
-                                    <input type="text" class="form-control" id="exampleInputFiscalCode" autocomplete="new-password" />
+                                    <label for="clientFiscalCode" class="form-label">Codice fiscale</label>
+                                    <input tabindex="7" type="text" class="form-control" id="clientFiscalCode" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputFiscalPhone" class="form-label">Telefono casa/ufficio</label>
-                                    <input type="text" class="form-control" id="exampleInputFiscalPhone" autocomplete="new-password" />
+                                    <label for="clientPhone" class="form-label">Telefono casa/ufficio</label>
+                                    <input tabindex="9" type="text" class="form-control" id="clientPhone" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputFiscalEmail" class="form-label">Email</label>
-                                    <input type="text" class="form-control" id="exampleInputFiscalEmail" autocomplete="new-password" />
+                                    <label for="clientEmail" class="form-label">Email</label>
+                                    <input tabindex="11" type="text" class="form-control" id="clientEmail" autocomplete="off" />
                                 </div>
                             </div>
                             <div class="col-md">
                                 <div class="mb-3">
-                                    <label for="exampleInputAddress" class="form-label">Indirizzo</label>
-                                    <input type="text" class="form-control" id="exampleInputAddress" autocomplete="new-password" />
+                                    <label for="clientAddress" class="form-label">Indirizzo</label>
+                                    <input tabindex="2" type="text" class="form-control" id="clientAddress" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputCity" class="form-label">Città</label>
-                                    <input type="text" class="form-control" id="exampleInputCity" autocomplete="new-password" />
+                                    <label for="clientCity" class="form-label">Città</label>
+                                    <input tabindex="4" type="text" class="form-control" id="clientCity" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputCountry" class="form-label">Nazione</label>
-                                    <input type="text" class="form-control" id="exampleInputCountry" autocomplete="new-password" />
+                                    <label for="clientCountry" class="form-label">Nazione</label>
+                                    <input tabindex="6" type="text" class="form-control" id="clientCountry" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputPIVA" class="form-label">Partita IVA</label>
-                                    <input type="text" class="form-control" id="exampleInputPIVA" autocomplete="new-password" />
+                                    <label for="clientPiva" class="form-label">Partita IVA</label>
+                                    <input tabindex="8" type="text" class="form-control" id="clientPiva" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputFiscalCell" class="form-label">Cellulare</label>
-                                    <input type="text" class="form-control" id="exampleInputFiscalCell" autocomplete="new-password" />
+                                    <label for="clientCell" class="form-label">Cellulare</label>
+                                    <input tabindex="10" type="text" class="form-control" id="clientCell" autocomplete="off" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleInputCode" class="form-label">Codice</label>
-                                    <input type="text" class="form-control" id="exampleInputCode" autocomplete="new-password" />
+                                    <label for="clientCode" class="form-label">Codice</label>
+                                    <input tabindex="12" type="text" class="form-control" id="clientCode" autocomplete="off" />
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                        <button type="button" class="btn btn-primary">Salva</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="insert()">Salva</button>
                     </div>
                 </div>
             </div>
