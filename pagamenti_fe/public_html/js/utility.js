@@ -11,6 +11,12 @@ var personalDataCreatePath = beUrl+"personal_data/create";
 var personalDataViewPath = beUrl+"personal_data/view";
 var personalDataUpdatePath = beUrl+"personal_data/update";
 var personalDataDeletePath = beUrl+"personal_data/delete";
+var servicesListPath = beUrl+"services/list";
+var servicesCreatePath = beUrl+"services/create";
+var servicesViewPath = beUrl+"services/view";
+var servicesUpdatePath = beUrl+"services/update";
+var servicesDeletePath = beUrl+"services/delete";
+
 
 //frontend path
 var feUrl = "http://localhost:8383/pagamenti_fe/";
