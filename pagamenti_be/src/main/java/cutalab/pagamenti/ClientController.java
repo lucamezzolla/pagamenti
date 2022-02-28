@@ -1,9 +1,9 @@
 package cutalab.pagamenti;
 
-import cutalab.pagamenti.models.ServiceEntity;
-import cutalab.pagamenti.models.ServiceListReduced;
+import cutalab.pagamenti.models.ClientEntity;
+import cutalab.pagamenti.models.ClientListReduced;
 import cutalab.pagamenti.models.UserEntity;
-import cutalab.pagamenti.repositories.ServiceRepository;
+import cutalab.pagamenti.repositories.ClientRepository;
 import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -23,44 +23,51 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-public class ServiceController {
+public class ClientController {
     
     @Autowired
     private UserRepository userRepository;
     
     @Autowired
-    private ServiceRepository serviceRepository;
+    private ClientRepository clientRepository;
     
-    @GetMapping("/services/list")
-    public ResponseEntity serviceList(@RequestParam String token) {
+    @GetMapping("/personal_data/list")
+    public ResponseEntity personalDataList(@RequestParam String token) {
         if(!validate(token)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        List<ServiceListReduced> list = serviceRepository.selectReducedList();
+        List<ClientListReduced> list = clientRepository.selectReducedList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
     
-    @GetMapping("/services/view")
-    public ResponseEntity serviceView(@RequestParam String token, @RequestParam Integer id) {
+    @GetMapping("/personal_data/view")
+    public ResponseEntity personalDataView(@RequestParam String token, @RequestParam Integer id) {
         try {
             if(!validate(token)) {
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-            Optional<ServiceEntity> s = serviceRepository.findById(id);
-            return new ResponseEntity<>(s.get(), HttpStatus.OK);
+            Optional<ClientEntity> c = clientRepository.findById(id);
+            return new ResponseEntity<>(c.get(), HttpStatus.OK);
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
         }
     }
     
-    @PostMapping("/services/create")
-    public ResponseEntity serviceCreate(
+    @PostMapping("/personal_data/create")
+    public ResponseEntity personalDataCreate(
             @RequestParam String token,
             @RequestParam String name,
             @RequestParam String address,
+            @RequestParam String cap,
+            @RequestParam String city,       
+            @RequestParam String state,
+            @RequestParam String country,
             @RequestParam String fiscal_code,
             @RequestParam String piva,
-            @RequestParam String description
+            @RequestParam String phone,
+            @RequestParam String cell,
+            @RequestParam String email,
+            @RequestParam String code
             ) {
         try {
             if(!validate(token)) {
@@ -72,28 +79,42 @@ public class ServiceController {
             if(piva.isEmpty()) {
                 piva = "00000000000";
             }
-            ServiceEntity s = new ServiceEntity();
-            s.setName(name);
-            s.setAddress(address);
-            s.setFiscalCode(fiscal_code.toUpperCase());
-            s.setPiva(piva);
-            s.setDescription(description);
-            serviceRepository.save(s);
+            ClientEntity c = new ClientEntity();
+            c.setName(name);
+            c.setAddress(address);
+            c.setCap(cap);
+            c.setCity(city);
+            c.setState(state);
+            c.setCountry(country);
+            c.setFiscalCode(fiscal_code.toUpperCase());
+            c.setPartitaIva(piva);
+            c.setPhone(phone);
+            c.setCell(cell);
+            c.setEmail(email);
+            c.setCode(code);
+            clientRepository.save(c);
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
-    @PutMapping("/services/update")
-    public ResponseEntity serviceUpdate(
+    @PutMapping("/personal_data/update")
+    public ResponseEntity personalDataUpdate(
             @RequestParam String token,
             @RequestParam Integer id,
             @RequestParam String name,
             @RequestParam String address,
+            @RequestParam String cap,
+            @RequestParam String city,       
+            @RequestParam String state,
+            @RequestParam String country,
             @RequestParam String fiscal_code,
             @RequestParam String piva,
-            @RequestParam String description
+            @RequestParam String phone,
+            @RequestParam String cell,
+            @RequestParam String email,
+            @RequestParam String code
             ) {
         try {
             if(!validate(token)) {
@@ -105,13 +126,20 @@ public class ServiceController {
             if(piva.isEmpty()) {
                 piva = "00000000000";
             }
-            ServiceEntity s = serviceRepository.getById(id);
-            s.setName(name);
-            s.setAddress(address);
-            s.setFiscalCode(fiscal_code.toUpperCase());
-            s.setPiva(piva);
-            s.setDescription(description);
-            serviceRepository.save(s);
+            ClientEntity c = clientRepository.getById(id);
+            c.setName(name);
+            c.setAddress(address);
+            c.setCap(cap);
+            c.setCity(city);
+            c.setState(state);
+            c.setCountry(country);
+            c.setFiscalCode(fiscal_code.toUpperCase());
+            c.setPartitaIva(piva);
+            c.setPhone(phone);
+            c.setCell(cell);
+            c.setEmail(email);
+            c.setCode(code);
+            clientRepository.save(c);
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
         } catch(DataAccessException ex) {
@@ -120,8 +148,8 @@ public class ServiceController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
-    @DeleteMapping("/services/delete")
-    public ResponseEntity serviceDelete(
+    @DeleteMapping("/personal_data/delete")
+    public ResponseEntity personalDataDelete(
             @RequestParam String token,
             @RequestParam Integer id
             ) {
@@ -129,8 +157,8 @@ public class ServiceController {
             if(!validate(token)) {
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-            ServiceEntity s = serviceRepository.getById(id);
-            serviceRepository.deleteById(id);
+            ClientEntity c = clientRepository.getById(id);
+            clientRepository.deleteById(id);
         } catch(Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -151,5 +179,5 @@ public class ServiceController {
         }
         return retval;
     }
-
+    
 }
