@@ -74,7 +74,7 @@ function view(id) {
             name.value = json.name;
             fiscalCode.value = json.fiscalCode;
             address.value = json.address;
-            piva.value = json.partitaIva;
+            piva.value = json.piva;
             description.value = json.description;
         }
     }
@@ -111,7 +111,7 @@ function edit() {
             successComponent.style.display = "none";
         }
     }
-    xxhr.send("token=" + token + "&id="+id+"&name=" + name + "&fiscal_code=" + fiscalCode + "&address=" + address + "&piva=" + piva + "&description=" + description);
+    xhr.send("token=" + token + "&id="+id+"&name=" + name + "&fiscal_code=" + fiscalCode + "&address=" + address + "&piva=" + piva + "&description=" + description);
 }
 
 function remove() {
@@ -153,7 +153,7 @@ function createTableInsertService(responseText) {
 }
 
 function printEditServiceButton(id) {
-    return "<button type='button' class='btn btn-outline-secondary' style='float: right' data-bs-toggle='modal' data-bs-target='#serviceModal' onclick='openClientModal(\"edit\",\"" + id + "\")'>"
+    return "<button type='button' class='btn btn-outline-secondary' style='float: right' data-bs-toggle='modal' data-bs-target='#serviceModal' onclick='openServiceModal(\"edit\",\"" + id + "\")'>"
             + "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-zoom-in' viewBox='0 0 16 16'>"
             + "<path fill-rule='evenodd' d='M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z'/>"
             + "<path d='M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z'/>"
@@ -162,7 +162,7 @@ function printEditServiceButton(id) {
             + "</button>";
 }
 
-function openClientModal(title, id) {
+function openServiceModal(title, id) {
     if (title == "new") {
         document.getElementById("serviceId").value = "";
         document.getElementById("serviceName").value = "";

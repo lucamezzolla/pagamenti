@@ -1,17 +1,14 @@
 package cutalab.pagamenti;
 
-import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import cutalab.pagamenti.models.ClientEntity;
 import cutalab.pagamenti.models.ClientListReduced;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.ClientRepository;
-import cutalab.pagamenti.repositories.ServiceRepository;
 import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -30,9 +27,6 @@ public class PagamentiController {
     
     @Autowired
     private UserRepository userRepository;
-    
-    @Autowired
-    private ServiceRepository serviceRepository;
     
     @Autowired
     private ClientRepository clientRepository;
