@@ -17,6 +17,7 @@ var feUrl = "http://localhost:8383/pagamenti_fe/";
 var indexPath = feUrl + "index.html";
 var signInFePath = feUrl + "signin.html";
 var personalDataFePath = feUrl + "personal_data.html";
+var servicesFePath = feUrl + "services.html";
 
 //functions
 function logout() {
