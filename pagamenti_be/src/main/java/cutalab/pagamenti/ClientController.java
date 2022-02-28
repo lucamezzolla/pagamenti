@@ -2,6 +2,7 @@ package cutalab.pagamenti;
 
 import cutalab.pagamenti.models.ClientEntity;
 import cutalab.pagamenti.models.ClientListReduced;
+import cutalab.pagamenti.models.ClientNameList;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.ClientRepository;
 import cutalab.pagamenti.repositories.UserRepository;
@@ -30,6 +31,12 @@ public class ClientController {
     
     @Autowired
     private ClientRepository clientRepository;
+    
+    @GetMapping("/personal_data/name-list")
+    public ResponseEntity clientNameList() {
+        List<ClientNameList> list = clientRepository.selectNameList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
     
     @GetMapping("/personal_data/list")
     public ResponseEntity personalDataList(@RequestParam String token) {

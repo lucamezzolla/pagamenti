@@ -1,5 +1,33 @@
 list();
 
+function clientList() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", personalDataNameListPath, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", personalDataNameListPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(this.responseText, "Scegli un'anagrafica");
+        }
+    }
+    xhr.send();
+}
+
+function serviceList() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", servicesNameListPath, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", servicesNameListPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            document.getElementById("paymentService").innerHTML = createSelectInsertPayment(this.responseText, "Scegli un servizio");
+        }
+    }
+    xhr.send();
+}
+
 function list() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", paymentsListPath + "/?token=" + token, true);
@@ -17,20 +45,145 @@ function list() {
                 document.getElementById("paymentTableBodyId").innerHTML = createTableInsertPayment(this.responseText);
             }
         } else if (this.readyState === 4 && this.status !== 200) {
-            //logout();
+           logout();
         }
     }
     xhr.send();
 }
+
+function insert() {
+    var xhr = new XMLHttpRequest();
+    var serviceId = document.getElementById("paymentService").value;
+    var code = document.getElementById("paymentCode").value;
+    var receipt = document.getElementById("paymentReceipt").value;
+    var qty = document.getElementById("paymentQty").value;
+    var iva = document.getElementById("paymentIva").value;
+    var clientId = document.getElementById("paymentClient").value;
+    var paymentDate = document.getElementById("paymentDate").value;
+    var description = document.getElementById("paymentDescription").value;
+    var invoice = document.getElementById("paymentInvoice").value;
+    var price = document.getElementById("paymentPrice").value;
+    var ivaCode = document.getElementById("paymentIvaCode").value;
+    var successComponent = document.getElementById("success");
+    var errorComponent = document.getElementById("error");
+    xhr.open("POST", paymentsCreatePath, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsCreatePath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "POST");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            errorComponent.style.display = "none";
+            var successMessage = "Il record è stato inserito con successo.";
+            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+            successComponent.style.display = "block";
+            errorComponent.style.display = "none";
+            list();
+        } else {
+            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+            errorComponent.style.display = "block";
+            successComponent.style.display = "none";
+        }
+    }
+    xhr.send("token=" + token + "&serviceId="+serviceId + "&code=" + code + "&receipt=" + receipt + "&qty="+qty + "&iva="+iva 
+        + "&clientId="+clientId + "&paymentDate=" + paymentDate + "&description="+description + "&invoice=" + invoice + "&price=" + price + "&ivaCode=" + ivaCode);
+}
+
+//function view(id) {
+//    var xhr = new XMLHttpRequest();
+//    xhr.open("GET", servicesViewPath + "?token=" + token + "&id=" + id, true);
+//    xhr.setRequestHeader("Access-Control-Allow-Origin", servicesViewPath);
+//    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+//    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+//    xhr.onreadystatechange = function () {
+//        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+//            var id = document.getElementById("serviceId");
+//            var name = document.getElementById("serviceName");
+//            var fiscalCode = document.getElementById("serviceFiscalCode");
+//            var address = document.getElementById("serviceAddress");
+//            var piva = document.getElementById("servicePiva");
+//            var description = document.getElementById("serviceDescription");
+//            var json = JSON.parse(this.responseText);
+//            id.value = json.id;
+//            name.value = json.name;
+//            fiscalCode.value = json.fiscalCode;
+//            address.value = json.address;
+//            piva.value = json.piva;
+//            description.value = json.description;
+//        }
+//    }
+//    xhr.send();
+//}
+//
+//function edit() {
+//    var xhr = new XMLHttpRequest();
+//    var id = document.getElementById("serviceId").value;
+//    var name = document.getElementById("serviceName").value;
+//    var fiscalCode = document.getElementById("serviceFiscalCode").value;
+//    var piva = document.getElementById("servicePiva").value;
+//    var description = document.getElementById("serviceDescription").value;
+//    var address = document.getElementById("serviceAddress").value;
+//    var successComponent = document.getElementById("success");
+//    var errorComponent = document.getElementById("error");
+//    xhr.open("PUT", servicesUpdatePath, true);
+//    xhr.setRequestHeader("Access-Control-Allow-Origin", servicesUpdatePath);
+//    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+//    xhr.setRequestHeader("Access-Control-Allow-Methods", "PUT");
+//    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+//    xhr.onreadystatechange = function () {
+//        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+//            errorComponent.style.display = "none";
+//            var successMessage = "Il record è stato aggiornato correttamente.";
+//            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+//            errorComponent.style.display = "none";
+//            successComponent.style.display = "block";
+//            list();
+//        } else {
+//            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+//            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+//            errorComponent.style.display = "block";
+//            successComponent.style.display = "none";
+//        }
+//    }
+//    xhr.send("token=" + token + "&id="+id+"&name=" + name + "&fiscal_code=" + fiscalCode + "&address=" + address + "&piva=" + piva + "&description=" + description);
+//}
+//
+//function remove() {
+//    var xhr = new XMLHttpRequest();
+//    var id = document.getElementById("serviceId").value;
+//    var successComponent = document.getElementById("success");
+//    var errorComponent = document.getElementById("error");
+//    xhr.open("DELETE", servicesDeletePath + "?token=" + token + "&id=" + id, true);
+//    xhr.setRequestHeader("Access-Control-Allow-Origin", servicesDeletePath);
+//    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+//    xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
+//    xhr.onreadystatechange = function () {
+//        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+//            errorComponent.style.display = "none";
+//            var successMessage = "Il record è stato rimosso correttamente.";
+//            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+//            errorComponent.style.display = "none";
+//            successComponent.style.display = "block";
+//            list();
+//        } else {
+//            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+//            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+//            successComponent.style.display = "none";
+//            errorComponent.style.display = "block";
+//        }
+//    }
+//    xhr.send();
+//}
 
 function createTableInsertPayment(responseText) {
     let text = "";
     var json = JSON.parse(responseText);
     console.log(json);
     for (var i = 0; i < json.length; i++) {
-        text += "<tr><td>" + json[i].service + "</td><td>"+json[i].date+"</td>"
-                + "<td>" + json[i].qty + "</td><td>" + json[i].price + "</td>"
-                + "<td>" + printEditServiceButton(json[i].id) + "</td></tr>";
+        text += "<tr><td>" + json[i].service.name + "</td><td>"+json[i].paymentDateTime+"</td>"
+                + "<td>" + json[i].quantity + "</td><td>" + json[i].price + "</td>"
+                + "<td>" + printEditPaymentButton(json[i].id) + "</td></tr>";
     }
     return text;
 }
@@ -43,4 +196,43 @@ function printEditPaymentButton(id) {
             + "<path fill-rule='evenodd' d='M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5z'/>"
             + "</svg>"
             + "</button>";
+}
+
+function createSelectInsertPayment(responseText, optionZero) {
+    let text = "<option value='-1' selected>"+optionZero+"</option>";
+    var json = JSON.parse(responseText);
+    for (var i = 0; i < json.length; i++) {
+        text += "<option value='"+json[i].id+"'>"+json[i].name+"</option>";
+    }
+    return text;
+}
+
+function openPaymentModal(title, id) {
+    clientList();
+    serviceList();
+    if (title == "new") {
+        document.getElementById("paymentId").value = "";
+        document.getElementById("paymentService").value = "";
+        document.getElementById("paymentCode").value = "";
+        document.getElementById("paymentReceipt").value = "";
+        document.getElementById("paymentClient").value = "";
+        document.getElementById("paymentDate").value = "";
+        document.getElementById("paymentDescription").value = "";
+        document.getElementById("paymentInvoice").value = "";
+        document.getElementById("paymentPrice").value = "";
+        document.getElementById("paymentQty").value = "";
+        document.getElementById("paymentIva").value = "";
+        document.getElementById("paymentIvaCode").value = "";
+        document.getElementById("paymentModalTitle").innerHTML = "Nuovo pagamento";
+        document.getElementById("paymentModalRemoveButton").style.display = "none";
+        document.getElementById("paymentModalEditButton").style.display = "none";
+        document.getElementById("paymentModalInsertButton").style.display = "block";
+    }
+    if (title == "edit") {
+//        view(id);
+        document.getElementById("paymentModalTitle").innerHTML = "Modifica pagamento";
+//        document.getElementById("serviceModalRemoveButton").style.display = "block";
+//        document.getElementById("serviceModalEditButton").style.display = "block";
+//        document.getElementById("serviceModalInsertButton").style.display = "none";
+    }
 }

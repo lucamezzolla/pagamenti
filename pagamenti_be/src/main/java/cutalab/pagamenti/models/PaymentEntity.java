@@ -26,7 +26,7 @@ public class PaymentEntity implements Serializable {
     
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(referencedColumnName="id", name="client_id", insertable=true, updatable=true, nullable=false)
-    private ClientEntity payment;
+    private ClientEntity client;
     
     @Column(name="payment_date", nullable=false)
     private LocalDateTime paymentDateTime;
@@ -69,6 +69,14 @@ public class PaymentEntity implements Serializable {
 
     public void setService(ServiceEntity service) {
         this.service = service;
+    }
+
+    public ClientEntity getClient() {
+        return client;
+    }
+
+    public void setClient(ClientEntity client) {
+        this.client = client;
     }
 
     public LocalDateTime getPaymentDateTime() {
@@ -142,5 +150,5 @@ public class PaymentEntity implements Serializable {
     public void setIvaCode(String ivaCode) {
         this.ivaCode = ivaCode;
     }
-    
+
 }

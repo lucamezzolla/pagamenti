@@ -63,19 +63,65 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md">
-                        <input type="hidden" id="paymentId">
-                        <div class="mb-3">
-                            <label for="serviceName" class="form-label">Nome</label>
-                            <input type="text" tabindex="1" class="form-control" id="paymentName" autocomplete="off" />
+                    <div class="row g-2">
+                        <div class="col-md">
+                            <input type="hidden" id="paymentId">
+                            <div class="mb-3">
+                                <label for="paymentService" class="form-label">Servizio *</label>
+                                <select tabindex="1" id="paymentService" class="form-select" aria-label="service-select"></select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentCode" class="form-label">Codice</label>
+                                <input type="text" tabindex="3" class="form-control" id="paymentCode" autocomplete="off" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentReceipt" class="form-label">Ricevuta</label>
+                                <input type="text" tabindex="5" class="form-control" id="paymentReceipt" autocomplete="off" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentQty" class="form-label">Quantità *</label>
+                                <input type="number" tabindex="7" class="form-control" id="paymentQty" autocomplete="off" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentIva" class="form-label">IVA</label>
+                                <input type="text" tabindex="9" class="form-control" id="paymentIva" autocomplete="off" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentClient" class="form-label">Anagrafica *</label>
+                                <select tabindex="11" id="paymentClient" class="form-select" aria-label="client-select">
+                                    <option value="-1" selected>Scegli un'anagrafica</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="mb-3">
+                                <label for="paymentDate" class="form-label">Data *</label>
+                                <input type="datetime-local" tabindex="2" class="form-control" id="paymentDate" autocomplete="off" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentDescription" class="form-label">Descrizione *</label>
+                                <input type="text" tabindex="4" class="form-control" id="paymentDescription" autocomplete="off" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentInvoice" class="form-label">Fattura</label>
+                                <input type="text" tabindex="6" class="form-control" id="paymentInvoice" autocomplete="off" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentPrice" class="form-label">Prezzo *</label>
+                                <input type="number" min="0.00" step="0.01" tabindex="8" class="form-control" id="paymentPrice" autocomplete="off" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="paymentIvaCode" class="form-label">Codice IVA</label>
+                                <input type="text" tabindex="10" class="form-control" id="paymentIvaCode" autocomplete="off" />
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="paymentModalRemoveButton" onclick="remove()" style="display: none">Rimuovi</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalEditButton" onclick="edit()" style="display: none">Salva</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalInsertButton" onclick="insert()" style="display: none">Salva</button>
+                    <button type="button" tabindex="12" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" tabindex="13" class="btn btn-danger" data-bs-dismiss="modal" id="paymentModalRemoveButton" onclick="remove()" style="display: none">Rimuovi</button>
+                    <button type="button" tabindex="14" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalEditButton" onclick="edit()" style="display: none">Salva</button>
+                    <button type="button" tabindex="15" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalInsertButton" onclick="insert()" style="display: none">Salva</button>
                 </div>
             </div>
         </div>

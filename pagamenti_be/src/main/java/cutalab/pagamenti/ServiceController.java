@@ -1,7 +1,7 @@
 package cutalab.pagamenti;
 
 import cutalab.pagamenti.models.ServiceEntity;
-import cutalab.pagamenti.models.ServiceListReduced;
+import cutalab.pagamenti.models.ServiceNameList;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.ServiceRepository;
 import cutalab.pagamenti.repositories.UserRepository;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import cutalab.pagamenti.models.ServiceReducedList;
 
 @RestController
 @CrossOrigin
@@ -31,12 +32,18 @@ public class ServiceController {
     @Autowired
     private ServiceRepository serviceRepository;
     
+    @GetMapping("/services/name-list")
+    public ResponseEntity serviceNameList() {
+        List<ServiceNameList> list = serviceRepository.selectNameList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    
     @GetMapping("/services/list")
     public ResponseEntity serviceList(@RequestParam String token) {
         if(!validate(token)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        List<ServiceListReduced> list = serviceRepository.selectReducedList();
+        List<ServiceReducedList> list = serviceRepository.selectReducedList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
     
