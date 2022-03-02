@@ -144,9 +144,10 @@ function remove() {
 function createTableInsertService(responseText) {
     let text = "";
     var json = JSON.parse(responseText);
+    console.log(json);
     for (var i = 0; i < json.length; i++) {
-        text += "<tr><td>" + json[i].name + "</td><td>"+json[i].address+"</td>"
-                + "<td>" + json[i].fiscal_Code + "</td><td>" + json[i].piva + "</td>"
+        text += "<tr><td>" + json[i].name + "</td><td>" + json[i].address + "</td>" 
+                + "<td>" + json[i].fiscal_Code + "</td>" + "<td>" + json[i].piva + "</td>"
                 + "<td>" + printEditServiceButton(json[i].id) + "</td></tr>";
     }
     return text;

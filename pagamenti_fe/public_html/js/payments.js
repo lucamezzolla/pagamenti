@@ -1,14 +1,19 @@
 list();
+clientList();
+serviceList();
+
+var clientArray = new Array();
+var serviceArray = new Array();
 
 function clientList() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", personalDataNameListPath, true);
+    xhr.open("GET", personalDataNameListPath + "?token=" + token, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", personalDataNameListPath);
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(this.responseText, "Scegli un'anagrafica");
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            clientArray = this.responseText;
         }
     }
     xhr.send();
@@ -16,13 +21,13 @@ function clientList() {
 
 function serviceList() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", servicesNameListPath, true);
+    xhr.open("GET", servicesNameListPath + "?token=" + token, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", servicesNameListPath);
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            document.getElementById("paymentService").innerHTML = createSelectInsertPayment(this.responseText, "Scegli un servizio");
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            serviceArray = this.responseText;
         }
     }
     xhr.send();
@@ -36,7 +41,7 @@ function list() {
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            if(this.responseText === "[]") {
+            if (this.responseText === "[]") {
                 document.getElementById("noDataWarnindId").style.display = "block";
                 document.getElementById("paymentTableDivId").style.display = "none";
             } else {
@@ -45,7 +50,7 @@ function list() {
                 document.getElementById("paymentTableBodyId").innerHTML = createTableInsertPayment(this.responseText);
             }
         } else if (this.readyState === 4 && this.status !== 200) {
-           logout();
+            logout();
         }
     }
     xhr.send();
@@ -86,102 +91,123 @@ function insert() {
             successComponent.style.display = "none";
         }
     }
-    xhr.send("token=" + token + "&serviceId="+serviceId + "&code=" + code + "&receipt=" + receipt + "&qty="+qty + "&iva="+iva 
-        + "&clientId="+clientId + "&paymentDate=" + paymentDate + "&description="+description + "&invoice=" + invoice + "&price=" + price + "&ivaCode=" + ivaCode);
+    xhr.send("token=" + token + "&serviceId=" + serviceId + "&code=" + code + "&receipt=" + receipt + "&qty=" + qty + "&iva=" + iva
+            + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice=" + invoice + "&price=" + price + "&ivaCode=" + ivaCode);
 }
 
-//function view(id) {
-//    var xhr = new XMLHttpRequest();
-//    xhr.open("GET", servicesViewPath + "?token=" + token + "&id=" + id, true);
-//    xhr.setRequestHeader("Access-Control-Allow-Origin", servicesViewPath);
-//    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
-//    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
-//    xhr.onreadystatechange = function () {
-//        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-//            var id = document.getElementById("serviceId");
-//            var name = document.getElementById("serviceName");
-//            var fiscalCode = document.getElementById("serviceFiscalCode");
-//            var address = document.getElementById("serviceAddress");
-//            var piva = document.getElementById("servicePiva");
-//            var description = document.getElementById("serviceDescription");
-//            var json = JSON.parse(this.responseText);
-//            id.value = json.id;
-//            name.value = json.name;
-//            fiscalCode.value = json.fiscalCode;
-//            address.value = json.address;
-//            piva.value = json.piva;
-//            description.value = json.description;
-//        }
-//    }
-//    xhr.send();
-//}
-//
-//function edit() {
-//    var xhr = new XMLHttpRequest();
-//    var id = document.getElementById("serviceId").value;
-//    var name = document.getElementById("serviceName").value;
-//    var fiscalCode = document.getElementById("serviceFiscalCode").value;
-//    var piva = document.getElementById("servicePiva").value;
-//    var description = document.getElementById("serviceDescription").value;
-//    var address = document.getElementById("serviceAddress").value;
-//    var successComponent = document.getElementById("success");
-//    var errorComponent = document.getElementById("error");
-//    xhr.open("PUT", servicesUpdatePath, true);
-//    xhr.setRequestHeader("Access-Control-Allow-Origin", servicesUpdatePath);
-//    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
-//    xhr.setRequestHeader("Access-Control-Allow-Methods", "PUT");
-//    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-//    xhr.onreadystatechange = function () {
-//        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-//            errorComponent.style.display = "none";
-//            var successMessage = "Il record è stato aggiornato correttamente.";
-//            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-//            errorComponent.style.display = "none";
-//            successComponent.style.display = "block";
-//            list();
-//        } else {
-//            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-//            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-//            errorComponent.style.display = "block";
-//            successComponent.style.display = "none";
-//        }
-//    }
-//    xhr.send("token=" + token + "&id="+id+"&name=" + name + "&fiscal_code=" + fiscalCode + "&address=" + address + "&piva=" + piva + "&description=" + description);
-//}
-//
-//function remove() {
-//    var xhr = new XMLHttpRequest();
-//    var id = document.getElementById("serviceId").value;
-//    var successComponent = document.getElementById("success");
-//    var errorComponent = document.getElementById("error");
-//    xhr.open("DELETE", servicesDeletePath + "?token=" + token + "&id=" + id, true);
-//    xhr.setRequestHeader("Access-Control-Allow-Origin", servicesDeletePath);
-//    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
-//    xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
-//    xhr.onreadystatechange = function () {
-//        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-//            errorComponent.style.display = "none";
-//            var successMessage = "Il record è stato rimosso correttamente.";
-//            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-//            errorComponent.style.display = "none";
-//            successComponent.style.display = "block";
-//            list();
-//        } else {
-//            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-//            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-//            successComponent.style.display = "none";
-//            errorComponent.style.display = "block";
-//        }
-//    }
-//    xhr.send();
-//}
+function view(id) {    
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", paymentsViewPath + "?token=" + token + "&id=" + id, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsViewPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            var id = document.getElementById("paymentId");
+            var code = document.getElementById("paymentCode");
+            var receipt = document.getElementById("paymentReceipt");
+            var qty = document.getElementById("paymentQty");
+            var iva = document.getElementById("paymentIva");
+            var paymentDate = document.getElementById("paymentDate");
+            var description = document.getElementById("paymentDescription");
+            var invoice = document.getElementById("paymentInvoice");
+            var price = document.getElementById("paymentPrice");
+            var ivaCode = document.getElementById("paymentIvaCode");
+            var json = JSON.parse(this.responseText);
+            id.value = json.id;
+            code.value = json.code;
+            receipt.value = json.receipt;
+            qty.value = json.quantity;
+            iva.value = json.iva;
+            paymentDate.value = json.paymentDateTime;
+            description.value = json.description;
+            invoice.value = json.invoice;
+            price.value = json.price;
+            ivaCode.value = json.ivaCode;
+            var service = document.getElementById("paymentService");
+            var client = document.getElementById("paymentClient");
+            service.options[json.service.id].selected = "true";
+            client.options[json.client.id].selected = "true";
+        }
+    }
+    xhr.send();
+}
+
+
+function edit() {
+    var xhr = new XMLHttpRequest();
+    var id = document.getElementById("paymentId").value;
+    var serviceId = document.getElementById("paymentService").value;
+    var code = document.getElementById("paymentCode").value;
+    var receipt = document.getElementById("paymentReceipt").value;
+    var qty = document.getElementById("paymentQty").value;
+    var iva = document.getElementById("paymentIva").value;
+    var clientId = document.getElementById("paymentClient").value;
+    var paymentDate = document.getElementById("paymentDate").value;
+    var description = document.getElementById("paymentDescription").value;
+    var invoice = document.getElementById("paymentInvoice").value;
+    var price = document.getElementById("paymentPrice").value;
+    var ivaCode = document.getElementById("paymentIvaCode").value;
+    var successComponent = document.getElementById("success");
+    var errorComponent = document.getElementById("error");
+    xhr.open("PUT", paymentsUpdatePath, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsUpdatePath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "PUT");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            errorComponent.style.display = "none";
+            var successMessage = "Il record è stato aggiornato correttamente.";
+            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+            errorComponent.style.display = "none";
+            successComponent.style.display = "block";
+            list();
+        } else {
+            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+            errorComponent.style.display = "block";
+            successComponent.style.display = "none";
+        }
+    }
+    xhr.send("token=" + token + "&id=" + id + "&serviceId=" + serviceId + "&code=" + code + "&receipt=" + receipt + "&qty=" + qty + "&iva=" + iva
+            + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice=" + invoice + "&price=" + price + "&ivaCode=" + ivaCode);
+}
+
+function remove() {
+    var xhr = new XMLHttpRequest();
+    var id = document.getElementById("paymentId").value;
+    var successComponent = document.getElementById("success");
+    var errorComponent = document.getElementById("error");
+    alert(paymentsDeletePath + "?token=" + token + "&id=" + id);
+    xhr.open("DELETE", paymentsDeletePath + "?token=" + token + "&id=" + id, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsDeletePath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            errorComponent.style.display = "none";
+            var successMessage = "Il record è stato rimosso correttamente.";
+            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+            errorComponent.style.display = "none";
+            successComponent.style.display = "block";
+            list();
+        } else {
+            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+            successComponent.style.display = "none";
+            errorComponent.style.display = "block";
+        }
+    }
+    xhr.send();
+}
 
 function createTableInsertPayment(responseText) {
     let text = "";
     var json = JSON.parse(responseText);
-    console.log(json);
     for (var i = 0; i < json.length; i++) {
-        text += "<tr><td>" + json[i].service.name + "</td><td>"+json[i].paymentDateTime+"</td>"
+        let date = json[i].paymentDateTimeString.substring(0, json[i].paymentDateTimeString.length - 3);
+        text += "<tr><td>" + json[i].service.name + "</td><td>" + date + "</td>"
                 + "<td>" + json[i].quantity + "</td><td>" + json[i].price + "</td>"
                 + "<td>" + printEditPaymentButton(json[i].id) + "</td></tr>";
     }
@@ -198,18 +224,16 @@ function printEditPaymentButton(id) {
             + "</button>";
 }
 
-function createSelectInsertPayment(responseText, optionZero) {
-    let text = "<option value='-1' selected>"+optionZero+"</option>";
-    var json = JSON.parse(responseText);
+function createSelectInsertPayment(array, optionZero) {
+    let text = "<option value='-1' selected>" + optionZero + "</option>";
+    var json = JSON.parse(array);
     for (var i = 0; i < json.length; i++) {
-        text += "<option value='"+json[i].id+"'>"+json[i].name+"</option>";
+        text += "<option value='" + json[i].id + "'>" + json[i].name + "</option>";
     }
     return text;
 }
 
 function openPaymentModal(title, id) {
-    clientList();
-    serviceList();
     if (title == "new") {
         document.getElementById("paymentId").value = "";
         document.getElementById("paymentService").value = "";
@@ -227,12 +251,17 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentModalRemoveButton").style.display = "none";
         document.getElementById("paymentModalEditButton").style.display = "none";
         document.getElementById("paymentModalInsertButton").style.display = "block";
+        document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
+        document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
     }
     if (title == "edit") {
-//        view(id);
         document.getElementById("paymentModalTitle").innerHTML = "Modifica pagamento";
-//        document.getElementById("serviceModalRemoveButton").style.display = "block";
-//        document.getElementById("serviceModalEditButton").style.display = "block";
-//        document.getElementById("serviceModalInsertButton").style.display = "none";
+        document.getElementById("paymentModalRemoveButton").style.display = "block";
+        document.getElementById("paymentModalEditButton").style.display = "block";
+        document.getElementById("paymentModalInsertButton").style.display = "none";
+        document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
+        document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
+        view(id);
     }
+    
 }

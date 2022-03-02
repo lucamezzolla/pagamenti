@@ -20,16 +20,18 @@ public class PaymentEntity implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(referencedColumnName="id", name="service_id", insertable=true, updatable=true, nullable=false)
     private ServiceEntity service;
     
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(referencedColumnName="id", name="client_id", insertable=true, updatable=true, nullable=false)
     private ClientEntity client;
     
     @Column(name="payment_date", nullable=false)
     private LocalDateTime paymentDateTime;
+    
+    private String paymentDateTimeString;
     
     @Column(name="invoice", nullable=true)
     private String invoice;
@@ -87,6 +89,14 @@ public class PaymentEntity implements Serializable {
         this.paymentDateTime = paymentDateTime;
     }
 
+    public String getPaymentDateTimeString() {
+        return paymentDateTimeString;
+    }
+
+    public void setPaymentDateTimeString(String paymentDateTimeString) {
+        this.paymentDateTimeString = paymentDateTimeString;
+    }
+    
     public String getInvoice() {
         return invoice;
     }

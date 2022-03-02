@@ -33,7 +33,10 @@ public class ClientController {
     private ClientRepository clientRepository;
     
     @GetMapping("/personal_data/name-list")
-    public ResponseEntity clientNameList() {
+    public ResponseEntity clientNameList(@RequestParam String token) {
+        if(!validate(token)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
         List<ClientNameList> list = clientRepository.selectNameList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -167,6 +170,9 @@ public class ClientController {
             ClientEntity c = clientRepository.getById(id);
             clientRepository.deleteById(id);
         } catch(Exception ex) {
+            if(ex.getMessage().contains("ConstraintViolationException")) {
+                return new ResponseEntity<>("Errore. Impossibile rimuovere l'anagrafica perché esistono uno o più pagamenti che la usano.", HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);

@@ -11,6 +11,7 @@ import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class PaymentController {
     
     @Autowired
     private PaymentRepository paymentRepository;
+    
+    private static DateTimeFormatter formatterList = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping("/payments/list")
     public ResponseEntity serviceList(@RequestParam String token) {
@@ -47,6 +51,12 @@ public class PaymentController {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
         List<PaymentEntity> list = paymentRepository.findAll();
+        Iterator<PaymentEntity> iterator = list.iterator();
+        while(iterator.hasNext()) {
+            PaymentEntity p = iterator.next();
+            String formattedDate = p.getPaymentDateTime().format(formatterList);
+            p.setPaymentDateTimeString(formattedDate);
+        }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
     
@@ -82,8 +92,11 @@ public class PaymentController {
             if(!validate(token)) {
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
-            if(description.isEmpty() || paymentDate == null || price == 0 || qty == 0 || clientId.isEmpty() || clientId.isEmpty()) {
+            if(description.isEmpty() || paymentDate == null || price == 0 || qty == 0 || clientId.isEmpty() || serviceId.isEmpty()) {
                 return new ResponseEntity("Errore. I campi con * sono richiesti.", HttpStatus.BAD_REQUEST);
+            }
+            if(Integer.valueOf(clientId) <= 0 || Integer.valueOf(serviceId) <= 0) {
+                return new ResponseEntity("Errore. I campi servizio e anagrafica sono richiesti.", HttpStatus.BAD_REQUEST);
             }
             if(iva.isEmpty()) {
                 iva = "00000000000";
@@ -97,7 +110,6 @@ public class PaymentController {
             p.setIva(iva);
             p.setIvaCode(ivaCode);
             paymentDate = paymentDate.replace("T", " ");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             LocalDateTime dateTime = LocalDateTime.parse(paymentDate, formatter);
             p.setPaymentDateTime(dateTime);
             p.setPrice(price);
@@ -105,7 +117,6 @@ public class PaymentController {
             p.setReceipt(receipt);
             p.setService(s);
             p.setClient(c);
-            System.out.println(p);
             paymentRepository.save(p);
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
@@ -122,7 +133,7 @@ public class PaymentController {
             @RequestParam String invoice,
             @RequestParam String iva,
             @RequestParam String ivaCode,
-            @RequestParam LocalDateTime paymentDate,
+            @RequestParam String paymentDate,
             @RequestParam Double price,
             @RequestParam Integer qty,
             @RequestParam String receipt,
@@ -136,21 +147,28 @@ public class PaymentController {
             if(description.isEmpty() || paymentDate == null || price == 0 || qty == 0 || clientId.isEmpty() || clientId.isEmpty()) {
                 return new ResponseEntity("Errore. I campi con * sono richiesti.", HttpStatus.BAD_REQUEST);
             }
+            if(Integer.valueOf(clientId) <= 0 || Integer.valueOf(serviceId) <= 0) {
+                return new ResponseEntity("Errore. I campi servizio e anagrafica sono richiesti.", HttpStatus.BAD_REQUEST);
+            }
             if(iva.isEmpty()) {
                 iva = "00000000000";
             }
+            ClientEntity c = clientRepository.getById(Integer.valueOf(clientId));
+            ServiceEntity s = serviceRepository.getById(Integer.valueOf(serviceId));
             PaymentEntity p = paymentRepository.getById(id);
             p.setCode(code);
             p.setDescription(description);
             p.setInvoice(invoice);
             p.setIva(iva);
             p.setIvaCode(ivaCode);
-            p.setPaymentDateTime(paymentDate);
+            paymentDate = paymentDate.replace("T", " ");
+            LocalDateTime dateTime = LocalDateTime.parse(paymentDate, formatter);
+            p.setPaymentDateTime(dateTime);
             p.setPrice(price);
             p.setQuantity(qty);
             p.setReceipt(receipt);
-            p.setService(null);
-            p.setClient(null);
+            p.setService(s);
+            p.setClient(c);
             paymentRepository.save(p);
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);

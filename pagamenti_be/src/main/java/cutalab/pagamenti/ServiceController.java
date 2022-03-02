@@ -33,7 +33,10 @@ public class ServiceController {
     private ServiceRepository serviceRepository;
     
     @GetMapping("/services/name-list")
-    public ResponseEntity serviceNameList() {
+    public ResponseEntity serviceNameList(@RequestParam String token) {
+        if(!validate(token)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
         List<ServiceNameList> list = serviceRepository.selectNameList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -139,6 +142,9 @@ public class ServiceController {
             ServiceEntity s = serviceRepository.getById(id);
             serviceRepository.deleteById(id);
         } catch(Exception ex) {
+            if(ex.getMessage().contains("ConstraintViolationException")) {
+                return new ResponseEntity<>("Errore. Impossibile rimuovere il servizio perché esistono uno o più pagamenti che lo usano.", HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
