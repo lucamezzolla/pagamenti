@@ -110,6 +110,7 @@ public class PaymentController {
             p.setIva(iva);
             p.setIvaCode(ivaCode);
             paymentDate = paymentDate.replace("T", " ");
+	    paymentDate = paymentDate.concat(":00");
             LocalDateTime dateTime = LocalDateTime.parse(paymentDate, formatter);
             p.setPaymentDateTime(dateTime);
             p.setPrice(price);
@@ -162,6 +163,8 @@ public class PaymentController {
             p.setIva(iva);
             p.setIvaCode(ivaCode);
             paymentDate = paymentDate.replace("T", " ");
+	    String[] paymentDateArray = paymentDate.split(" ");
+	    if(paymentDateArray[1].length() == 5) paymentDate = paymentDate.concat(":00"); 
             LocalDateTime dateTime = LocalDateTime.parse(paymentDate, formatter);
             p.setPaymentDateTime(dateTime);
             p.setPrice(price);
