@@ -1,23 +1,17 @@
 package cutalab.pagamenti;
 
-import cutalab.pagamenti.models.ClientEntity;
-import cutalab.pagamenti.models.ClientListReduced;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.ClientRepository;
 import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,12 +34,15 @@ public class PagamentiController {
     }
     
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestParam String name, @RequestParam String email, @RequestParam String password1, @RequestParam String password2) {
-        if(name.isEmpty() || email.isEmpty() || password1.isEmpty() || password2.isEmpty()) {
+    public ResponseEntity signup(@RequestParam String name, @RequestParam String email, @RequestParam String password1, @RequestParam String password2, @RequestParam String code) {
+        if(name.isEmpty() || email.isEmpty() || password1.isEmpty() || password2.isEmpty() || code.isEmpty()) {
             return new ResponseEntity("Errore. Campi vuoti.", HttpStatus.BAD_REQUEST);
         }
         if(!password1.equals(password2)) {
             return new ResponseEntity("Errore. La password non coincidono.", HttpStatus.BAD_REQUEST);
+        }
+        if(!code.equals("EvwTPsubs5jvzA5SZepP")) {
+            return new ResponseEntity("Errore. Il codice di registrazione è invalido.", HttpStatus.BAD_REQUEST);
         }
         String encryptedPassword = CryptoUtil.encrypt(password1);
         UserEntity user = new UserEntity();

@@ -13,6 +13,7 @@ function send() {
     var email = document.getElementById("email").value;
     var password1 = document.getElementById("password1").value;
     var password2 = document.getElementById("password2").value;
+    var code = document.getElementById("code").value;
     var errorComponent = document.getElementById("error");
     xhr.open("POST", signUpPath, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", signUpPath);
@@ -28,5 +29,5 @@ function send() {
             errorComponent.style.display = "block";
         }
     }
-    xhr.send("name=" + name + "&email=" + email + "&password1=" + password1 + "&password2=" + password2 );    
+    xhr.send("name=" + name + "&email=" + email + "&password1=" + password1 + "&password2=" + password2 + "&code=" + code);    
 }
