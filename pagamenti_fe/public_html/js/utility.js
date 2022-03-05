@@ -53,3 +53,11 @@ function goto(page) {
     }
     xhr.send("token="+token);    
 }
+
+function showWaitingDiv () {
+    document.getElementById("waiting").style.display = "block";
+}
+
+function hideWaitingDiv() {
+    document.getElementById("waiting").style.display = "none";
+}

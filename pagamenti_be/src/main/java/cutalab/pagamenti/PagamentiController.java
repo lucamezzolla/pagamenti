@@ -65,7 +65,7 @@ public class PagamentiController {
         String encryptedPassword = CryptoUtil.encrypt(password);
         UserEntity user = userRepository.findByEmailAndPassword(email, encryptedPassword);
         if(user == null) {
-            return new ResponseEntity("Utente non trovato.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Errore. Utente non trovato.", HttpStatus.BAD_REQUEST);
         }
         String token = buildToken(user.getId());
         return new ResponseEntity<>(token, HttpStatus.OK);
