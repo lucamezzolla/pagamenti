@@ -34,23 +34,27 @@ function serviceList() {
 }
 
 function list() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     xhr.open("GET", paymentsListPath + "/?token=" + token, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsListPath);
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            if (this.responseText === "[]") {
-                document.getElementById("noDataWarnindId").style.display = "block";
-                document.getElementById("paymentTableDivId").style.display = "none";
-            } else {
-                document.getElementById("paymentTableDivId").style.display = "block";
-                document.getElementById("noDataWarnindId").style.display = "none";
-                document.getElementById("paymentTableBodyId").innerHTML = createTableInsertPayment(this.responseText);
+        if(this.readyState === XMLHttpRequest.DONE ) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                if (this.responseText === "[]") {
+                    document.getElementById("noDataWarnindId").style.display = "block";
+                    document.getElementById("paymentTableDivId").style.display = "none";
+                } else {
+                    document.getElementById("paymentTableDivId").style.display = "block";
+                    document.getElementById("noDataWarnindId").style.display = "none";
+                    document.getElementById("paymentTableBodyId").innerHTML = createTableInsertPayment(this.responseText);
+                }
+            } else if (this.readyState === 4 && this.status !== 200) {
+                logout();
             }
-        } else if (this.readyState === 4 && this.status !== 200) {
-            logout();
         }
     }
     xhr.send();
