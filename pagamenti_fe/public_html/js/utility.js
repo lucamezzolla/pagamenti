@@ -61,3 +61,7 @@ function showWaitingDiv () {
 function hideWaitingDiv() {
     document.getElementById("waiting").style.display = "none";
 }
+
+function confirmRemove() {
+    return confirm("Attenzione questo record verrà rimosso dal database. Sei sicuro?");
+}
