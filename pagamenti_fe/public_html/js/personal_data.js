@@ -1,29 +1,34 @@
 list();
 
 function list() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     xhr.open("GET", personalDataListPath + "/?token=" + token, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", personalDataListPath);
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            if(this.responseText === "[]") {
-                document.getElementById("noDataWarnindId").style.display = "block";
-                document.getElementById("clientTableDivId").style.display = "none";
-            } else {
-                document.getElementById("clientTableDivId").style.display = "block";
-                document.getElementById("noDataWarnindId").style.display = "none";
-                document.getElementById("clientTableBodyId").innerHTML = createTableInsertClient(this.responseText);
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                if (this.responseText === "[]") {
+                    document.getElementById("noDataWarnindId").style.display = "block";
+                    document.getElementById("clientTableDivId").style.display = "none";
+                } else {
+                    document.getElementById("clientTableDivId").style.display = "block";
+                    document.getElementById("noDataWarnindId").style.display = "none";
+                    document.getElementById("clientTableBodyId").innerHTML = createTableInsertClient(this.responseText);
+                }
+            } else if (this.readyState === 4 && this.status !== 200) {
+                logout();
             }
-        } else if (this.readyState === 4 && this.status !== 200) {
-            logout();
         }
     }
     xhr.send();
 }
 
 function insert() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     var name = document.getElementById("clientName").value;
     var cap = document.getElementById("clientCap").value;
@@ -45,18 +50,21 @@ function insert() {
     xhr.setRequestHeader("Access-Control-Allow-Methods", "POST");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            errorComponent.style.display = "none";
-            var successMessage = "Il record è stato inserito con successo.";
-            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-            successComponent.style.display = "block";
-            errorComponent.style.display = "none";
-            list();
-        } else {
-            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-            errorComponent.style.display = "block";
-            successComponent.style.display = "none";
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                errorComponent.style.display = "none";
+                var successMessage = "Il record è stato inserito con successo.";
+                successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+                successComponent.style.display = "block";
+                errorComponent.style.display = "none";
+                list();
+            } else {
+                var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                errorComponent.style.display = "block";
+                successComponent.style.display = "none";
+            }
         }
     }
     xhr.send("token=" + token + "&name=" + name + "&cap=" + cap + "&state=" + state + "&fiscal_code=" + fiscalCode
@@ -71,40 +79,43 @@ function view(id) {
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            var id = document.getElementById("clientId");
-            var name = document.getElementById("clientName");
-            var cap = document.getElementById("clientCap");
-            var state = document.getElementById("clientState");
-            var fiscalCode = document.getElementById("clientFiscalCode");
-            var phone = document.getElementById("clientPhone");
-            var email = document.getElementById("clientEmail");
-            var address = document.getElementById("clientAddress");
-            var city = document.getElementById("clientCity");
-            var country = document.getElementById("clientCountry");
-            var piva = document.getElementById("clientPiva");
-            var cell = document.getElementById("clientCell");
-            var code = document.getElementById("clientCode");
-            var json = JSON.parse(this.responseText);
-            id.value = json.id;
-            name.value = json.name;
-            cap.value = json.cap;
-            state.value = json.state;
-            fiscalCode.value = json.fiscalCode;
-            phone.value = json.phone;
-            address.value = json.address;
-            city.value = json.city;
-            country.value = json.country;
-            piva.value = json.partitaIva;
-            cell.value = json.cell;
-            code.value = json.code;
-            email.value = json.email;
+        if (this.readyState === XMLHttpRequest.DONE) {
+            if (this.status === 200) {
+                var id = document.getElementById("clientId");
+                var name = document.getElementById("clientName");
+                var cap = document.getElementById("clientCap");
+                var state = document.getElementById("clientState");
+                var fiscalCode = document.getElementById("clientFiscalCode");
+                var phone = document.getElementById("clientPhone");
+                var email = document.getElementById("clientEmail");
+                var address = document.getElementById("clientAddress");
+                var city = document.getElementById("clientCity");
+                var country = document.getElementById("clientCountry");
+                var piva = document.getElementById("clientPiva");
+                var cell = document.getElementById("clientCell");
+                var code = document.getElementById("clientCode");
+                var json = JSON.parse(this.responseText);
+                id.value = json.id;
+                name.value = json.name;
+                cap.value = json.cap;
+                state.value = json.state;
+                fiscalCode.value = json.fiscalCode;
+                phone.value = json.phone;
+                address.value = json.address;
+                city.value = json.city;
+                country.value = json.country;
+                piva.value = json.partitaIva;
+                cell.value = json.cell;
+                code.value = json.code;
+                email.value = json.email;
+            }
         }
     }
     xhr.send();
 }
 
 function edit() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     var id = document.getElementById("clientId").value;
     var name = document.getElementById("clientName").value;
@@ -127,18 +138,21 @@ function edit() {
     xhr.setRequestHeader("Access-Control-Allow-Methods", "PUT");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            errorComponent.style.display = "none";
-            var successMessage = "Il record è stato aggiornato correttamente.";
-            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-            errorComponent.style.display = "none";
-            successComponent.style.display = "block";
-            list();
-        } else {
-            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-            errorComponent.style.display = "block";
-            successComponent.style.display = "none";
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                errorComponent.style.display = "none";
+                var successMessage = "Il record è stato aggiornato correttamente.";
+                successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+                errorComponent.style.display = "none";
+                successComponent.style.display = "block";
+                list();
+            } else {
+                var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                errorComponent.style.display = "block";
+                successComponent.style.display = "none";
+            }
         }
     }
     xhr.send("token=" + token + "&id=" + id + "&name=" + name + "&cap=" + cap + "&state=" + state + "&fiscal_code=" + fiscalCode
@@ -147,6 +161,7 @@ function edit() {
 }
 
 function remove() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     var id = document.getElementById("clientId").value;
     var successComponent = document.getElementById("success");
@@ -156,18 +171,21 @@ function remove() {
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
     xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            errorComponent.style.display = "none";
-            var successMessage = "Il record è stato rimosso correttamente.";
-            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-            errorComponent.style.display = "none";
-            successComponent.style.display = "block";
-            list();
-        } else {
-            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-            successComponent.style.display = "none";
-            errorComponent.style.display = "block";
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                errorComponent.style.display = "none";
+                var successMessage = "Il record è stato rimosso correttamente.";
+                successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+                errorComponent.style.display = "none";
+                successComponent.style.display = "block";
+                list();
+            } else {
+                var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                successComponent.style.display = "none";
+                errorComponent.style.display = "block";
+            }
         }
     }
     xhr.send();

@@ -41,7 +41,7 @@ function list() {
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
-        if(this.readyState === XMLHttpRequest.DONE ) {
+        if (this.readyState === XMLHttpRequest.DONE) {
             hideWaitingDiv();
             if (this.status === 200) {
                 if (this.responseText === "[]") {
@@ -61,6 +61,7 @@ function list() {
 }
 
 function insert() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     var serviceId = document.getElementById("paymentService").value;
     var code = document.getElementById("paymentCode").value;
@@ -81,25 +82,28 @@ function insert() {
     xhr.setRequestHeader("Access-Control-Allow-Methods", "POST");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            errorComponent.style.display = "none";
-            var successMessage = "Il record è stato inserito con successo.";
-            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-            successComponent.style.display = "block";
-            errorComponent.style.display = "none";
-            list();
-        } else {
-            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-            errorComponent.style.display = "block";
-            successComponent.style.display = "none";
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                errorComponent.style.display = "none";
+                var successMessage = "Il record è stato inserito con successo.";
+                successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+                successComponent.style.display = "block";
+                errorComponent.style.display = "none";
+                list();
+            } else {
+                var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                errorComponent.style.display = "block";
+                successComponent.style.display = "none";
+            }
         }
     }
     xhr.send("token=" + token + "&serviceId=" + serviceId + "&code=" + code + "&receipt=" + receipt + "&qty=" + qty + "&iva=" + iva
             + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice=" + invoice + "&price=" + price + "&ivaCode=" + ivaCode);
 }
 
-function view(id) {    
+function view(id) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", paymentsViewPath + "?token=" + token + "&id=" + id, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsViewPath);
@@ -139,6 +143,7 @@ function view(id) {
 
 
 function edit() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     var id = document.getElementById("paymentId").value;
     var serviceId = document.getElementById("paymentService").value;
@@ -160,18 +165,21 @@ function edit() {
     xhr.setRequestHeader("Access-Control-Allow-Methods", "PUT");
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            errorComponent.style.display = "none";
-            var successMessage = "Il record è stato aggiornato correttamente.";
-            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-            errorComponent.style.display = "none";
-            successComponent.style.display = "block";
-            list();
-        } else {
-            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-            errorComponent.style.display = "block";
-            successComponent.style.display = "none";
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                errorComponent.style.display = "none";
+                var successMessage = "Il record è stato aggiornato correttamente.";
+                successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+                errorComponent.style.display = "none";
+                successComponent.style.display = "block";
+                list();
+            } else {
+                var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                errorComponent.style.display = "block";
+                successComponent.style.display = "none";
+            }
         }
     }
     xhr.send("token=" + token + "&id=" + id + "&serviceId=" + serviceId + "&code=" + code + "&receipt=" + receipt + "&qty=" + qty + "&iva=" + iva
@@ -179,28 +187,31 @@ function edit() {
 }
 
 function remove() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     var id = document.getElementById("paymentId").value;
     var successComponent = document.getElementById("success");
     var errorComponent = document.getElementById("error");
-    alert(paymentsDeletePath + "?token=" + token + "&id=" + id);
     xhr.open("DELETE", paymentsDeletePath + "?token=" + token + "&id=" + id, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsDeletePath);
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
     xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
     xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            errorComponent.style.display = "none";
-            var successMessage = "Il record è stato rimosso correttamente.";
-            successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-            errorComponent.style.display = "none";
-            successComponent.style.display = "block";
-            list();
-        } else {
-            var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-            errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-            successComponent.style.display = "none";
-            errorComponent.style.display = "block";
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                errorComponent.style.display = "none";
+                var successMessage = "Il record è stato rimosso correttamente.";
+                successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+                errorComponent.style.display = "none";
+                successComponent.style.display = "block";
+                list();
+            } else {
+                var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                successComponent.style.display = "none";
+                errorComponent.style.display = "block";
+            }
         }
     }
     xhr.send();
@@ -267,5 +278,5 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
         view(id);
     }
-    
+
 }
