@@ -24,11 +24,16 @@ var paymentsViewPath = beUrl+"payments/view";
 var paymentsUpdatePath = beUrl+"payments/update";
 var paymentsDeletePath = beUrl+"payments/delete";
 var paymentsAttachmentPath = beUrl+"payments/attachment";
+var usersListPath = beUrl+"users/list";
+var usersViewPath = beUrl+"users/view";
+var usersUpdatePath = beUrl+"users/update";
+var usersDeletePath = beUrl+"users/delete";
 
 //frontend path
 var feUrl = "http://localhost:8383/pagamenti_fe/";
 var indexPath = feUrl + "index.html";
 var signInFePath = feUrl + "signin.html";
+var signUpFePath = feUrl + "signup.html";
 var personalDataFePath = feUrl + "personal_data.html";
 var servicesFePath = feUrl + "services.html";
 
