@@ -203,10 +203,17 @@ public class PaymentController {
             paymentRepository.save(p);
             //Aggiorno l'allegato
             if(!attachment.isBlank()) {
-                PaymentAttachmentEntity a = paymentAttachmentRepository.getByPaymentId(id);
                 attachment = attachment.replaceAll(" ", "+");
-                a.setAttachment(attachment);
-                paymentAttachmentRepository.save(a);
+                PaymentAttachmentEntity a1 = paymentAttachmentRepository.getByPaymentId(id);
+                if(a1 == null) {
+                    PaymentAttachmentEntity a2 = new PaymentAttachmentEntity();
+                    a2.setAttachment(attachment);
+                    a2.setPayment(p);
+                    paymentAttachmentRepository.save(a2);
+                } else {
+                    a1.setAttachment(attachment);
+                    paymentAttachmentRepository.save(a1);
+                }
             }
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
