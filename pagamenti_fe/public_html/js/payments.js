@@ -4,6 +4,8 @@ serviceList();
 
 var clientArray = new Array();
 var serviceArray = new Array();
+var attachment;
+var isNew = 1;
 
 function clientList() {
     var xhr = new XMLHttpRequest();
@@ -99,8 +101,32 @@ function insert() {
             }
         }
     }
+
     xhr.send("token=" + token + "&serviceId=" + serviceId + "&code=" + code + "&receipt=" + receipt + "&qty=" + qty + "&iva=" + iva
-            + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice=" + invoice + "&price=" + price + "&ivaCode=" + ivaCode);
+            + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice=" + invoice
+            + "&price=" + price + "&ivaCode=" + ivaCode + "&attachment=" + attachment);
+
+}
+
+function loadingAttachment() {
+    var button;
+    if(isNew == 1) button = document.getElementById("paymentModalInsertButton");
+    else button = document.getElementById("paymentModalEditButton");
+    button.style.display = "none";
+    var file = document.getElementById("paymentAttachment").files[0];
+    var reader = new FileReader();
+    reader.onload = function (evt) {
+        //const metadata = `name: ${file.name}, type: ${file.type}, size: ${file.size}, contents:`;
+        attachment = evt.target.result;
+    }
+    reader.onloadend = function () {
+        button.style.display = "block";
+    }
+    reader.readAsDataURL(file);
+}
+
+function readerFunction(reader) {
+    return reader.result;
 }
 
 function view(id) {
@@ -183,7 +209,8 @@ function edit() {
         }
     }
     xhr.send("token=" + token + "&id=" + id + "&serviceId=" + serviceId + "&code=" + code + "&receipt=" + receipt + "&qty=" + qty + "&iva=" + iva
-            + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice=" + invoice + "&price=" + price + "&ivaCode=" + ivaCode);
+            + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice=" 
+            + invoice + "&price=" + price + "&ivaCode=" + ivaCode + "&attachment=" + attachment);
 }
 
 function remove() {
@@ -252,6 +279,8 @@ function createSelectInsertPayment(array, optionZero) {
 
 function openPaymentModal(title, id) {
     if (title == "new") {
+        isNew = 1;
+        attachment = "";
         document.getElementById("paymentId").value = "";
         document.getElementById("paymentService").value = "";
         document.getElementById("paymentCode").value = "";
@@ -264,7 +293,10 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentQty").value = "";
         document.getElementById("paymentIva").value = "";
         document.getElementById("paymentIvaCode").value = "";
+        document.getElementById("paymentAttachment").value = "";
         document.getElementById("paymentModalTitle").innerHTML = "Nuovo pagamento";
+        document.getElementById("paymentAttachmentLabel").innerHTML = "Allegato";
+        document.getElementById("paymentShowAttachmentButton").style.display = "none";
         document.getElementById("paymentModalRemoveButton").style.display = "none";
         document.getElementById("paymentModalEditButton").style.display = "none";
         document.getElementById("paymentModalInsertButton").style.display = "block";
@@ -272,7 +304,12 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
     }
     if (title == "edit") {
+        isNew = 0;
+        attachment = "";
+        document.getElementById("paymentAttachment").value = "";
+        document.getElementById("paymentAttachmentLabel").innerHTML = "Modifica allegato";
         document.getElementById("paymentModalTitle").innerHTML = "Modifica pagamento";
+        document.getElementById("paymentModalRemoveButton").style.display = "block";
         document.getElementById("paymentModalRemoveButton").style.display = "block";
         document.getElementById("paymentModalEditButton").style.display = "block";
         document.getElementById("paymentModalInsertButton").style.display = "none";
@@ -281,4 +318,30 @@ function openPaymentModal(title, id) {
         view(id);
     }
 
+}
+
+function showAttachment() {var xhr = new XMLHttpRequest();
+    showWaitingDiv();
+    var id = document.getElementById("paymentId").value;
+    xhr.open("GET", paymentsAttachmentPath + "?token=" + token + "&id=" + id, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsAttachmentPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            hideWaitingDiv();
+            var json = JSON.parse(this.responseText);
+            let data = json.attachment;
+            var image = new Image();
+            image.src = data;
+            image.style.setProperty("display", "block");
+            image.style.setProperty("margin-left", "auto");
+            image.style.setProperty("margin-right", "auto");
+            image.style.setProperty("max-width", "80%");
+            image.style.setProperty("height", "auto");
+            var w = window.open("");
+            w.document.write(image.outerHTML);
+        }
+    }
+    xhr.send();
 }

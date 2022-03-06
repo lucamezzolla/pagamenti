@@ -1,10 +1,12 @@
 package cutalab.pagamenti;
 
 import cutalab.pagamenti.models.ClientEntity;
+import cutalab.pagamenti.models.PaymentAttachmentEntity;
 import cutalab.pagamenti.models.PaymentEntity;
 import cutalab.pagamenti.models.ServiceEntity;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.ClientRepository;
+import cutalab.pagamenti.repositories.PaymentAttachmentRepository;
 import cutalab.pagamenti.repositories.PaymentRepository;
 import cutalab.pagamenti.repositories.ServiceRepository;
 import cutalab.pagamenti.repositories.UserRepository;
@@ -42,6 +44,9 @@ public class PaymentController {
     @Autowired
     private PaymentRepository paymentRepository;
     
+    @Autowired
+    private PaymentAttachmentRepository paymentAttachmentRepository;
+    
     private static DateTimeFormatter formatterList = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -73,6 +78,19 @@ public class PaymentController {
         }
     }
     
+    @GetMapping("/payments/attachment")
+    public ResponseEntity paymentAttachment(@RequestParam String token, @RequestParam Long id) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            PaymentAttachmentEntity p = paymentAttachmentRepository.getByPaymentId(id);
+            return new ResponseEntity<>(p, HttpStatus.OK);
+        } catch(IllegalArgumentException ex) {
+            return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
+        }
+    }
+    
     @PostMapping("/payments/create")
     public ResponseEntity paymentCreate(
             @RequestParam String token,
@@ -86,7 +104,8 @@ public class PaymentController {
             @RequestParam Integer qty,
             @RequestParam String receipt,
             @RequestParam String clientId,
-            @RequestParam String serviceId
+            @RequestParam String serviceId,
+            @RequestParam String attachment
             ) {
         try {
             if(!validate(token)) {
@@ -119,6 +138,14 @@ public class PaymentController {
             p.setService(s);
             p.setClient(c);
             paymentRepository.save(p);
+            //Salvo l'allegato
+            if(!attachment.isBlank()) {
+                PaymentAttachmentEntity a = new PaymentAttachmentEntity();
+                a.setPayment(p);
+                attachment = attachment.replaceAll(" ", "+");
+                a.setAttachment(attachment);
+                paymentAttachmentRepository.save(a);
+            }
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
         }
@@ -139,7 +166,8 @@ public class PaymentController {
             @RequestParam Integer qty,
             @RequestParam String receipt,
             @RequestParam String clientId,
-            @RequestParam String serviceId
+            @RequestParam String serviceId,
+            @RequestParam String attachment
             ) {
         try {
             if(!validate(token)) {
@@ -173,6 +201,13 @@ public class PaymentController {
             p.setService(s);
             p.setClient(c);
             paymentRepository.save(p);
+            //Aggiorno l'allegato
+            if(!attachment.isBlank()) {
+                PaymentAttachmentEntity a = paymentAttachmentRepository.getByPaymentId(id);
+                attachment = attachment.replaceAll(" ", "+");
+                a.setAttachment(attachment);
+                paymentAttachmentRepository.save(a);
+            }
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
         } catch(DataAccessException ex) {

@@ -23,6 +23,7 @@ var paymentsCreatePath = beUrl+"payments/create";
 var paymentsViewPath = beUrl+"payments/view";
 var paymentsUpdatePath = beUrl+"payments/update";
 var paymentsDeletePath = beUrl+"payments/delete";
+var paymentsAttachmentPath = beUrl+"payments/attachment";
 
 //frontend path
 var feUrl = "http://localhost:8383/pagamenti_fe/";

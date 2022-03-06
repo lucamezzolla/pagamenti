@@ -2,7 +2,6 @@ package cutalab.pagamenti.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="payments")
@@ -31,6 +31,7 @@ public class PaymentEntity implements Serializable {
     @Column(name="payment_date", nullable=false)
     private LocalDateTime paymentDateTime;
     
+    @Transient
     private String paymentDateTimeString;
     
     @Column(name="invoice", nullable=true)
