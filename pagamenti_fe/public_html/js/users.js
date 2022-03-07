@@ -85,36 +85,36 @@ function edit() {
 }
 
 function remove() {
-//    if (confirmRemove()) {
-//        showWaitingDiv();
-//        var xhr = new XMLHttpRequest();
-//        var id = document.getElementById("serviceId").value;
-//        var successComponent = document.getElementById("success");
-//        var errorComponent = document.getElementById("error");
-//        xhr.open("DELETE", servicesDeletePath + "?token=" + token + "&id=" + id, true);
-//        xhr.setRequestHeader("Access-Control-Allow-Origin", servicesDeletePath);
-//        xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
-//        xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
-//        xhr.onreadystatechange = function () {
-//            if (this.readyState === XMLHttpRequest.DONE) {
-//                hideWaitingDiv();
-//                if (this.status === 200) {
-//                    errorComponent.style.display = "none";
-//                    var successMessage = "Il record è stato rimosso correttamente.";
-//                    successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-//                    errorComponent.style.display = "none";
-//                    successComponent.style.display = "block";
-//                    list();
-//                } else {
-//                    var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
-//                    errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
-//                    successComponent.style.display = "none";
-//                    errorComponent.style.display = "block";
-//                }
-//            }
-//        }
-//        xhr.send();
-//    }
+    if (confirmRemove()) {
+        showWaitingDiv();
+        var xhr = new XMLHttpRequest();
+        var id = document.getElementById("userId").value;
+        var successComponent = document.getElementById("success");
+        var errorComponent = document.getElementById("error");
+        xhr.open("DELETE", usersDeletePath + "?token=" + token + "&id=" + id, true);
+        xhr.setRequestHeader("Access-Control-Allow-Origin", usersDeletePath);
+        xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+        xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
+        xhr.onreadystatechange = function () {
+            if (this.readyState === XMLHttpRequest.DONE) {
+                hideWaitingDiv();
+                if (this.status === 200) {
+                    errorComponent.style.display = "none";
+                    var successMessage = "Il record è stato rimosso correttamente.";
+                    successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+                    errorComponent.style.display = "none";
+                    successComponent.style.display = "block";
+                    list();
+                } else {
+                    var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                    errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                    successComponent.style.display = "none";
+                    errorComponent.style.display = "block";
+                }
+            }
+        }
+        xhr.send();
+    }
 }
 
 function createTableInsertUser(responseText) {

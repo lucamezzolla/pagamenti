@@ -1,5 +1,6 @@
 package cutalab.pagamenti;
 
+import cutalab.pagamenti.models.ServiceEntity;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cutalab.pagamenti.models.UserListReduced;
 import cutalab.pagamenti.models.UserReduced;
 import org.springframework.dao.DataAccessException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -45,6 +47,29 @@ public class UserController {
         } catch (IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    @DeleteMapping("/users/delete")
+    public ResponseEntity usersDelete(
+            @RequestParam String token,
+            @RequestParam Integer id
+            ) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            List<UserEntity> findAll = userRepository.findAll();
+            if(findAll.size() == 1) {
+                return new ResponseEntity<>("Errore. Non è possibile rimuovere quest'utenza.", HttpStatus.NOT_ACCEPTABLE);
+            }
+            userRepository.deleteById(id);
+        } catch(Exception ex) {
+            if(ex.getMessage().contains("ConstraintViolationException")) {
+                return new ResponseEntity<>("Errore. Impossibile rimuovere il servizio perché esistono uno o più pagamenti che lo usano.", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/users/update")
