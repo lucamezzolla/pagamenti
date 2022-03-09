@@ -21,13 +21,23 @@
             <hr />            
             <div id="success" style="display: none"></div>
             <div id="error" style="display: none"></div>
-            <button type="button" class="btn btn-link" style="padding-left: 0.5rem; float: left" onclick="history.back()">Torna indietro</button>
+            <div class="row g-2">
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-link" style="padding-left: 0.5rem; float: left;" onclick="history.back()">Torna indietro</button>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="mb-3">
+                        <select class="form-select" id="searchSelectService" onchange="list(this.value)"></select>
+                    </div>
+                </div>
+            </div>
             <div id="noDataWarnindId" style="display: none">
-                <br><br><br>
                 <div class="alert alert-warning d-flex align-items-center" role="alert">
                     <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
                     <div>
-                        Attenzione: la lista dei pagamenti è vuota. <a href="#" class="alert-link" data-bs-toggle="modal" data-bs-target="#paymentModal" onclick="openPaymentModal('new')">Clicca qua</a> per inserirne uno.
+                        Attenzione. Nessun pagamento trovato sulla base dei criteri di ricerca indicati. <a href="#" class="alert-link" data-bs-toggle="modal" data-bs-target="#paymentModal" onclick="openPaymentModal('new')">Clicca qua</a> per inserirne uno oppure eseguire un'altra ricerca.
                     </div>
                 </div>
             </div>

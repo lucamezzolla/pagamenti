@@ -51,11 +51,11 @@ public class PaymentController {
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping("/payments/list")
-    public ResponseEntity serviceList(@RequestParam String token) {
+    public ResponseEntity serviceList(@RequestParam String token, @RequestParam Integer id) {
         if(!validate(token)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        List<PaymentEntity> list = paymentRepository.findAll();
+        List<PaymentEntity> list = paymentRepository.findByServiceId(id);
         Iterator<PaymentEntity> iterator = list.iterator();
         while(iterator.hasNext()) {
             PaymentEntity p = iterator.next();

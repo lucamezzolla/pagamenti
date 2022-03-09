@@ -1,4 +1,5 @@
-list();
+document.getElementById("paymentTableDivId").style.display = "none";
+                    
 clientList();
 serviceList();
 
@@ -16,6 +17,7 @@ function clientList() {
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             clientArray = this.responseText;
+            document.getElementById("searchSelectService").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
         }
     }
     xhr.send();
@@ -35,31 +37,37 @@ function serviceList() {
     xhr.send();
 }
 
-function list() {
-    showWaitingDiv();
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", paymentsListPath + "/?token=" + token, true);
-    xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsListPath);
-    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
-    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
-    xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE) {
-            hideWaitingDiv();
-            if (this.status === 200) {
-                if (this.responseText === "[]") {
-                    document.getElementById("noDataWarnindId").style.display = "block";
-                    document.getElementById("paymentTableDivId").style.display = "none";
-                } else {
-                    document.getElementById("paymentTableDivId").style.display = "block";
-                    document.getElementById("noDataWarnindId").style.display = "none";
-                    document.getElementById("paymentTableBodyId").innerHTML = createTableInsertPayment(this.responseText);
+function list(id) {
+    if(id > 0) {
+        showWaitingDiv();
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", paymentsListPath + "/?token=" + token + "&id=" + id, true);
+        xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsListPath);
+        xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+        xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+        xhr.onreadystatechange = function () {
+            if (this.readyState === XMLHttpRequest.DONE) {
+                hideWaitingDiv();
+                if (this.status === 200) {
+                    if (this.responseText === "[]") {
+                        document.getElementById("noDataWarnindId").style.display = "block";
+                        document.getElementById("paymentTableDivId").style.display = "none";
+                    } else {
+                        document.getElementById("paymentTableDivId").style.display = "block";
+                        document.getElementById("noDataWarnindId").style.display = "none";
+                        document.getElementById("paymentTableBodyId").innerHTML = createTableInsertPayment(this.responseText);
+                    }
+                } else if (this.readyState === 4 && this.status !== 200) {
+                    logout();
                 }
-            } else if (this.readyState === 4 && this.status !== 200) {
-                logout();
             }
         }
+        xhr.send();
+    } else {
+        document.getElementById("paymentTableBodyId").innerHTML = "";
+        document.getElementById("paymentTableDivId").style.display = "none";
+        document.getElementById("noDataWarnindId").style.display = "none";
     }
-    xhr.send();
 }
 
 function insert() {
