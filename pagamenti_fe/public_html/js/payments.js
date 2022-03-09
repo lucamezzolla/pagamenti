@@ -311,6 +311,7 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentAttachment").value = "";
         document.getElementById("paymentAttachmentLabel").innerHTML = "Modifica allegato";
         document.getElementById("paymentModalTitle").innerHTML = "Modifica pagamento";
+        document.getElementById("noAttachmentWarnindId").style.display = "none";
         document.getElementById("paymentModalRemoveButton").style.display = "block";
         document.getElementById("paymentModalRemoveButton").style.display = "block";
         document.getElementById("paymentModalEditButton").style.display = "block";
@@ -334,23 +335,27 @@ function showAttachment() {
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             hideWaitingDiv();
-            var json = JSON.parse(this.responseText);
-            let data = json.attachment;
-            if(this.responseText.includes("application/pdf")) {
-                let pdfWindow = window.open("")
-                pdfWindow.document.write(
-                    "<iframe style='margin: 0; border: none' width='100%' height='100%' src='"+ encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
-                );
+            if(this.responseText) {
+                var json = JSON.parse(this.responseText);
+                let data = json.attachment;
+                if(this.responseText.includes("application/pdf")) {
+                    let pdfWindow = window.open("")
+                    pdfWindow.document.write(
+                        "<iframe style='margin: 0; border: none' width='100%' height='100%' src='"+ encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
+                    );
+                } else {
+                    var image = new Image();
+                    image.src = data;
+                    image.style.setProperty("display", "block");
+                    image.style.setProperty("margin-left", "auto");
+                    image.style.setProperty("margin-right", "auto");
+                    image.style.setProperty("max-width", "80%");
+                    image.style.setProperty("height", "auto");
+                    var w = window.open("");
+                    w.document.write(image.outerHTML);
+                }
             } else {
-                var image = new Image();
-                image.src = data;
-                image.style.setProperty("display", "block");
-                image.style.setProperty("margin-left", "auto");
-                image.style.setProperty("margin-right", "auto");
-                image.style.setProperty("max-width", "80%");
-                image.style.setProperty("height", "auto");
-                var w = window.open("");
-                w.document.write(image.outerHTML);
+                document.getElementById("noAttachmentWarnindId").style.display = "block";
             }
         }
     }
