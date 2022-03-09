@@ -400,13 +400,16 @@ function showAttachment() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             hideWaitingDiv();
             if (this.responseText) {
+                document.getElementById("noAttachmentWarnindId").style.display = "none";
+                document.getElementById("success").style.display = "none";
+                document.getElementById("error").style.display = "none";
                 var json = JSON.parse(this.responseText);
                 let data = json.attachment;
                 if (this.responseText.includes("application/pdf")) {
                     let pdfWindow = window.open("");
                     pdfWindow.document.write(
-                        "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
-                    );
+                            "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
+                            );
                 } else {
                     var image = new Image();
                     image.src = data;
@@ -437,13 +440,16 @@ function showAttachment2(id) {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             hideWaitingDiv();
             if (this.responseText) {
+                document.getElementById("noAttachmentWarnindId").style.display = "none";
+                document.getElementById("success").style.display = "none";
+                document.getElementById("error").style.display = "none";
                 var json = JSON.parse(this.responseText);
                 let data = json.attachment;
                 if (this.responseText.includes("application/pdf")) {
                     let pdfWindow = window.open("");
                     pdfWindow.document.write(
-                        "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
-                    );
+                            "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
+                            );
                 } else {
                     var image = new Image();
                     image.src = data;
