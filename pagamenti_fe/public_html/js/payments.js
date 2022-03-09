@@ -43,6 +43,9 @@ function serviceList() {
 }
 
 function list(id) {
+    document.getElementById("noAttachmentWarnindId").style.display = "none";
+    document.getElementById("success").style.display = "none";
+    document.getElementById("error").style.display = "none";
     if (id > 0) {
         showWaitingDiv();
         var xhr = new XMLHttpRequest();
@@ -250,7 +253,7 @@ function remove() {
                     successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
                     errorComponent.style.display = "none";
                     successComponent.style.display = "block";
-                    list();
+                    list(document.getElementById("searchSelectService").value);
                 } else {
                     var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
                     errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
@@ -283,7 +286,7 @@ function removeAttachment() {
                     successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
                     errorComponent.style.display = "none";
                     successComponent.style.display = "block";
-                    list();
+                    list(document.getElementById("searchSelectService").value);
                 } else {
                     var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
                     errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
@@ -405,19 +408,15 @@ function showAttachment() {
                         "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
                     );
                 } else {
-                    let imageWindow = window.open("");
-                    imageWindow.document.write(
-                            "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + data + "'></iframe><script>document.body.style.margin = 0;</script>"
-                            );
-//                    var image = new Image();
-//                    image.src = data;
-//                    image.style.setProperty("display", "block");
-//                    image.style.setProperty("margin-left", "auto");
-//                    image.style.setProperty("margin-right", "auto");
-//                    image.style.setProperty("max-width", "80%");
-//                    image.style.setProperty("height", "auto");
-//                    var w = window.open("");
-//                    w.document.write(image.outerHTML);
+                    var image = new Image();
+                    image.src = data;
+                    image.style.setProperty("display", "block");
+                    image.style.setProperty("margin-left", "auto");
+                    image.style.setProperty("margin-right", "auto");
+                    image.style.setProperty("max-width", "80%");
+                    image.style.setProperty("height", "auto");
+                    var w = window.open("");
+                    w.document.write(image.outerHTML);
                 }
             } else {
                 document.getElementById("noAttachmentWarnindId").style.display = "block";
