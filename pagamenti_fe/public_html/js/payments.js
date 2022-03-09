@@ -1,6 +1,6 @@
 document.getElementById("paymentTableDivId").style.display = "none";
 document.getElementById("noDataWarnindId").style.display = "block";
-                    
+
 clientList();
 serviceList();
 
@@ -43,7 +43,7 @@ function serviceList() {
 }
 
 function list(id) {
-    if(id > 0) {
+    if (id > 0) {
         showWaitingDiv();
         var xhr = new XMLHttpRequest();
         xhr.open("GET", paymentsListPath + "/?token=" + token + "&id=" + id, true);
@@ -100,12 +100,13 @@ function insert() {
         if (this.readyState === XMLHttpRequest.DONE) {
             hideWaitingDiv();
             if (this.status === 200) {
+                document.getElementById("noAttachmentWarnindId").style.display = "none";
                 errorComponent.style.display = "none";
                 var successMessage = "Il record è stato inserito con successo.";
                 successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
                 successComponent.style.display = "block";
                 errorComponent.style.display = "none";
-                list();
+                list(document.getElementById("searchSelectService").value);
             } else {
                 var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
                 errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
@@ -209,12 +210,13 @@ function edit() {
         if (this.readyState === XMLHttpRequest.DONE) {
             hideWaitingDiv();
             if (this.status === 200) {
+                document.getElementById("noAttachmentWarnindId").style.display = "none";
                 errorComponent.style.display = "none";
                 var successMessage = "Il record è stato aggiornato correttamente.";
                 successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
                 errorComponent.style.display = "none";
                 successComponent.style.display = "block";
-                list();
+                list(document.getElementById("searchSelectService").value);
             } else {
                 var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
                 errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
@@ -299,7 +301,7 @@ function createTableInsertPayment(responseText) {
     var json = JSON.parse(responseText);
     for (var i = 0; i < json.length; i++) {
         let date = json[i].paymentDateTimeString.substring(0, json[i].paymentDateTimeString.length - 3);
-        text += "<tr><td>" + json[i].service.name + "</td><td>" + date + "</td>"
+        text += "<tr value='luca'><td>" + json[i].service.name + "</td><td>" + date + "</td>"
                 + "<td>" + json[i].quantity + "</td><td>" + json[i].price + "</td>"
                 + "<td>" + printEditPaymentButton(json[i].id) + "</td></tr>";
     }
@@ -313,7 +315,14 @@ function printEditPaymentButton(id) {
             + "<path d='M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z'/>"
             + "<path fill-rule='evenodd' d='M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5z'/>"
             + "</svg>"
-            + "</button>";
+            + "</button>"
+            + "<button type='button' class='btn btn-outline-secondary' style='float: right; margin-right: 8px' onclick='showAttachment2(" + id + ")'>"
+            + "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-card-image' viewBox='0 0 16 16'>"
+            + "<path d='M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z'></path>"
+            + "<path d='M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z'></path>"
+            + "</svg>"
+            + "<span class='visually-hidden'>Button</span>"
+            + "</button>"
 }
 
 function createSelectInsertPayment(array, optionZero) {
@@ -349,6 +358,8 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentModalRemoveButton").style.display = "none";
         document.getElementById("paymentModalEditButton").style.display = "none";
         document.getElementById("paymentModalInsertButton").style.display = "block";
+        document.getElementById("success").style.display = "none";
+        document.getElementById("error").style.display = "none";
         document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
         document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
     }
@@ -365,6 +376,8 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentModalInsertButton").style.display = "none";
         document.getElementById("paymentShowAttachmentButton").style.display = "block";
         document.getElementById("paymentAttachmentModalRemoveButton").style.display = "block";
+        document.getElementById("success").style.display = "none";
+        document.getElementById("error").style.display = "none";
         document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
         document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
         view(id);
@@ -373,8 +386,8 @@ function openPaymentModal(title, id) {
 }
 
 function showAttachment() {
-    var xhr = new XMLHttpRequest();
     showWaitingDiv();
+    var xhr = new XMLHttpRequest();
     var id = document.getElementById("paymentId").value;
     xhr.open("GET", paymentsAttachmentPath + "?token=" + token + "&id=" + id, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsAttachmentPath);
@@ -383,13 +396,54 @@ function showAttachment() {
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             hideWaitingDiv();
-            if(this.responseText) {
+            if (this.responseText) {
                 var json = JSON.parse(this.responseText);
                 let data = json.attachment;
-                if(this.responseText.includes("application/pdf")) {
-                    let pdfWindow = window.open("")
+                if (this.responseText.includes("application/pdf")) {
+                    let pdfWindow = window.open("");
                     pdfWindow.document.write(
-                        "<iframe style='margin: 0; border: none' width='100%' height='100%' src='"+ encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
+                        "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
+                    );
+                } else {
+                    let imageWindow = window.open("");
+                    imageWindow.document.write(
+                            "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + data + "'></iframe><script>document.body.style.margin = 0;</script>"
+                            );
+//                    var image = new Image();
+//                    image.src = data;
+//                    image.style.setProperty("display", "block");
+//                    image.style.setProperty("margin-left", "auto");
+//                    image.style.setProperty("margin-right", "auto");
+//                    image.style.setProperty("max-width", "80%");
+//                    image.style.setProperty("height", "auto");
+//                    var w = window.open("");
+//                    w.document.write(image.outerHTML);
+                }
+            } else {
+                document.getElementById("noAttachmentWarnindId").style.display = "block";
+            }
+        }
+    }
+    xhr.send();
+}
+
+function showAttachment2(id) {
+    showWaitingDiv();
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", paymentsAttachmentPath + "?token=" + token + "&id=" + id, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsAttachmentPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            hideWaitingDiv();
+            if (this.responseText) {
+                var json = JSON.parse(this.responseText);
+                let data = json.attachment;
+                if (this.responseText.includes("application/pdf")) {
+                    let pdfWindow = window.open("");
+                    pdfWindow.document.write(
+                        "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
                     );
                 } else {
                     var image = new Image();
