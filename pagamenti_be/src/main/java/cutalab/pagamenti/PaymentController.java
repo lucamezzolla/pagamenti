@@ -55,7 +55,7 @@ public class PaymentController {
         if(!validate(token)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        List<PaymentEntity> list = paymentRepository.findByServiceId(id);
+        List<PaymentEntity> list = paymentRepository.findByServiceIdOrderByPaymentDateTimeDesc(id);
         Iterator<PaymentEntity> iterator = list.iterator();
         while(iterator.hasNext()) {
             PaymentEntity p = iterator.next();
