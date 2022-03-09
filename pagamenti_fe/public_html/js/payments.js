@@ -313,6 +313,7 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentModalRemoveButton").style.display = "block";
         document.getElementById("paymentModalEditButton").style.display = "block";
         document.getElementById("paymentModalInsertButton").style.display = "none";
+        document.getElementById("paymentShowAttachmentButton").style.display = "block";
         document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
         document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
         view(id);
