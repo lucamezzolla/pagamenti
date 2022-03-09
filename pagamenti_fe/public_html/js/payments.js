@@ -110,8 +110,10 @@ function insert() {
 
 function loadingAttachment() {
     var button;
-    if(isNew == 1) button = document.getElementById("paymentModalInsertButton");
-    else button = document.getElementById("paymentModalEditButton");
+    if (isNew == 1)
+        button = document.getElementById("paymentModalInsertButton");
+    else
+        button = document.getElementById("paymentModalEditButton");
     button.style.display = "none";
     var file = document.getElementById("paymentAttachment").files[0];
     var reader = new FileReader();
@@ -209,7 +211,7 @@ function edit() {
         }
     }
     xhr.send("token=" + token + "&id=" + id + "&serviceId=" + serviceId + "&code=" + code + "&receipt=" + receipt + "&qty=" + qty + "&iva=" + iva
-            + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice=" 
+            + "&clientId=" + clientId + "&paymentDate=" + paymentDate + "&description=" + description + "&invoice="
             + invoice + "&price=" + price + "&ivaCode=" + ivaCode + "&attachment=" + attachment);
 }
 
@@ -321,7 +323,8 @@ function openPaymentModal(title, id) {
 
 }
 
-function showAttachment() {var xhr = new XMLHttpRequest();
+function showAttachment() {
+    var xhr = new XMLHttpRequest();
     showWaitingDiv();
     var id = document.getElementById("paymentId").value;
     xhr.open("GET", paymentsAttachmentPath + "?token=" + token + "&id=" + id, true);
@@ -333,15 +336,22 @@ function showAttachment() {var xhr = new XMLHttpRequest();
             hideWaitingDiv();
             var json = JSON.parse(this.responseText);
             let data = json.attachment;
-            var image = new Image();
-            image.src = data;
-            image.style.setProperty("display", "block");
-            image.style.setProperty("margin-left", "auto");
-            image.style.setProperty("margin-right", "auto");
-            image.style.setProperty("max-width", "80%");
-            image.style.setProperty("height", "auto");
-            var w = window.open("");
-            w.document.write(image.outerHTML);
+            if(this.responseText.includes("application/pdf")) {
+                let pdfWindow = window.open("")
+                pdfWindow.document.write(
+                    "<iframe style='margin: 0; border: none' width='100%' height='100%' src='"+ encodeURI(data) + "'></iframe>"
+                );
+            } else {
+                var image = new Image();
+                image.src = data;
+                image.style.setProperty("display", "block");
+                image.style.setProperty("margin-left", "auto");
+                image.style.setProperty("margin-right", "auto");
+                image.style.setProperty("max-width", "80%");
+                image.style.setProperty("height", "auto");
+                var w = window.open("");
+                w.document.write(image.outerHTML);
+            }
         }
     }
     xhr.send();
