@@ -248,6 +248,39 @@ function remove() {
     }
 }
 
+function removeAttachment() {
+    if (confirmRemove()) {
+        showWaitingDiv();
+        var xhr = new XMLHttpRequest();
+        var id = document.getElementById("paymentId").value;
+        var successComponent = document.getElementById("success");
+        var errorComponent = document.getElementById("error");
+        xhr.open("DELETE", paymentsAttachmentDeletePath + "?token=" + token + "&id=" + id, true);
+        xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsAttachmentDeletePath);
+        xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+        xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
+        xhr.onreadystatechange = function () {
+            if (this.readyState === XMLHttpRequest.DONE) {
+                hideWaitingDiv();
+                if (this.status === 200) {
+                    errorComponent.style.display = "none";
+                    var successMessage = "Il record è stato rimosso correttamente.";
+                    successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
+                    errorComponent.style.display = "none";
+                    successComponent.style.display = "block";
+                    list();
+                } else {
+                    var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                    errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                    successComponent.style.display = "none";
+                    errorComponent.style.display = "block";
+                }
+            }
+        }
+        xhr.send();
+    }
+}
+
 function createTableInsertPayment(responseText) {
     let text = "";
     var json = JSON.parse(responseText);
@@ -298,6 +331,7 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentAttachment").value = "";
         document.getElementById("paymentModalTitle").innerHTML = "Nuovo pagamento";
         document.getElementById("paymentAttachmentLabel").innerHTML = "Allegato";
+        document.getElementById("paymentAttachmentModalRemoveButton").style.display = "none";
         document.getElementById("paymentShowAttachmentButton").style.display = "none";
         document.getElementById("paymentModalRemoveButton").style.display = "none";
         document.getElementById("paymentModalEditButton").style.display = "none";
@@ -317,6 +351,7 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentModalEditButton").style.display = "block";
         document.getElementById("paymentModalInsertButton").style.display = "none";
         document.getElementById("paymentShowAttachmentButton").style.display = "block";
+        document.getElementById("paymentAttachmentModalRemoveButton").style.display = "block";
         document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
         document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
         view(id);

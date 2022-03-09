@@ -91,6 +91,20 @@ public class PaymentController {
         }
     }
     
+    @DeleteMapping("/payments/attachment/delete")
+    public ResponseEntity paymentAttachmentDelete(@RequestParam String token, @RequestParam Long id) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            PaymentAttachmentEntity p = paymentAttachmentRepository.getByPaymentId(id);
+            paymentAttachmentRepository.delete(p);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch(IllegalArgumentException ex) {
+            return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
+        }
+    }
+    
     @PostMapping("/payments/create")
     public ResponseEntity paymentCreate(
             @RequestParam String token,

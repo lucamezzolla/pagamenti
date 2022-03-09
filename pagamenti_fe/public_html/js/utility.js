@@ -24,6 +24,7 @@ var paymentsViewPath = beUrl+"payments/view";
 var paymentsUpdatePath = beUrl+"payments/update";
 var paymentsDeletePath = beUrl+"payments/delete";
 var paymentsAttachmentPath = beUrl+"payments/attachment";
+var paymentsAttachmentDeletePath = beUrl+"payments/attachment/delete";
 var usersListPath = beUrl+"users/list";
 var usersViewPath = beUrl+"users/view";
 var usersUpdatePath = beUrl+"users/update";
