@@ -1,4 +1,5 @@
 document.getElementById("paymentTableDivId").style.display = "none";
+document.getElementById("noDataWarnindId").style.display = "block";
                     
 clientList();
 serviceList();
@@ -9,6 +10,7 @@ var attachment;
 var isNew = 1;
 
 function clientList() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     xhr.open("GET", personalDataNameListPath + "?token=" + token, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", personalDataNameListPath);
@@ -16,14 +18,15 @@ function clientList() {
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            hideWaitingDiv();
             clientArray = this.responseText;
-            document.getElementById("searchSelectService").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
         }
     }
     xhr.send();
 }
 
 function serviceList() {
+    showWaitingDiv();
     var xhr = new XMLHttpRequest();
     xhr.open("GET", servicesNameListPath + "?token=" + token, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", servicesNameListPath);
@@ -31,7 +34,9 @@ function serviceList() {
     xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
     xhr.onreadystatechange = function () {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            hideWaitingDiv();
             serviceArray = this.responseText;
+            document.getElementById("searchSelectService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un'anagrafica");
         }
     }
     xhr.send();
