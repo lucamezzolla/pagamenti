@@ -339,7 +339,7 @@ function showAttachment() {
             if(this.responseText.includes("application/pdf")) {
                 let pdfWindow = window.open("")
                 pdfWindow.document.write(
-                    "<iframe style='margin: 0; border: none' width='100%' height='100%' src='"+ encodeURI(data) + "'></iframe>"
+                    "<iframe style='margin: 0; border: none' width='100%' height='100%' src='"+ encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
                 );
             } else {
                 var image = new Image();
