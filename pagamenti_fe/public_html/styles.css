@@ -76,3 +76,8 @@
         opacity:1
     }
 }
+
+@media screen and (max-width: 1000px) {
+    #paymentsPic { width: 80% !important; }
+    #buttonsAreaIndex { width: 90%}     
+}
