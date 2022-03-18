@@ -171,7 +171,7 @@ public class ClientController {
             clientRepository.deleteById(id);
         } catch(Exception ex) {
             if(ex.getMessage().contains("ConstraintViolationException")) {
-                return new ResponseEntity<>("Errore. Impossibile rimuovere l'anagrafica perché esistono uno o più pagamenti che la usano.", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Errore. Impossibile rimuovere l'anagrafica perché esistono prestiti o pagamenti che la usano.", HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

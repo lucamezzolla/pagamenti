@@ -249,7 +249,7 @@ public class PaymentController {
             PaymentEntity p = paymentRepository.getById(id);
             paymentRepository.deleteById(id);
         } catch(Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Errore. Devi rimuovere prima l'allegato.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

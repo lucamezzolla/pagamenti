@@ -319,7 +319,7 @@ function printEditPaymentButton(id) {
             + "<path fill-rule='evenodd' d='M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5z'/>"
             + "</svg>"
             + "</button>"
-            + "<button type='button' class='btn btn-outline-secondary' style='float: right; margin-right: 8px' onclick='showAttachment2(" + id + ")'>"
+            + "<button type='button' class='btn btn-outline-secondary' style='float: right; margin-right: 8px' onclick='showAttachment(" + id + ")'>"
             + "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-card-image' viewBox='0 0 16 16'>"
             + "<path d='M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z'></path>"
             + "<path d='M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54A.505.505 0 0 1 1 12.5v-9a.5.5 0 0 1 .5-.5h13z'></path>"
@@ -357,7 +357,6 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentModalTitle").innerHTML = "Nuovo pagamento";
         document.getElementById("paymentAttachmentLabel").innerHTML = "Allegato";
         document.getElementById("paymentAttachmentModalRemoveButton").style.display = "none";
-        document.getElementById("paymentShowAttachmentButton").style.display = "none";
         document.getElementById("paymentModalRemoveButton").style.display = "none";
         document.getElementById("paymentModalEditButton").style.display = "none";
         document.getElementById("paymentModalInsertButton").style.display = "block";
@@ -377,7 +376,6 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentModalRemoveButton").style.display = "block";
         document.getElementById("paymentModalEditButton").style.display = "block";
         document.getElementById("paymentModalInsertButton").style.display = "none";
-        document.getElementById("paymentShowAttachmentButton").style.display = "block";
         document.getElementById("paymentAttachmentModalRemoveButton").style.display = "block";
         document.getElementById("success").style.display = "none";
         document.getElementById("error").style.display = "none";
@@ -388,48 +386,7 @@ function openPaymentModal(title, id) {
 
 }
 
-function showAttachment() {
-    showWaitingDiv();
-    var xhr = new XMLHttpRequest();
-    var id = document.getElementById("paymentId").value;
-    xhr.open("GET", paymentsAttachmentPath + "?token=" + token + "&id=" + id, true);
-    xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsAttachmentPath);
-    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
-    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
-    xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            hideWaitingDiv();
-            if (this.responseText) {
-                document.getElementById("noAttachmentWarnindId").style.display = "none";
-                document.getElementById("success").style.display = "none";
-                document.getElementById("error").style.display = "none";
-                var json = JSON.parse(this.responseText);
-                let data = json.attachment;
-                if (this.responseText.includes("application/pdf")) {
-                    let pdfWindow = window.open("");
-                    pdfWindow.document.write(
-                            "<iframe style='margin: 0; border: none' width='100%' height='100%' src='" + encodeURI(data) + "'></iframe><script>document.body.style.margin = 0;</script>"
-                            );
-                } else {
-                    var image = new Image();
-                    image.src = data;
-                    image.style.setProperty("display", "block");
-                    image.style.setProperty("margin-left", "auto");
-                    image.style.setProperty("margin-right", "auto");
-                    image.style.setProperty("max-width", "80%");
-                    image.style.setProperty("height", "auto");
-                    var w = window.open("");
-                    w.document.write(image.outerHTML);
-                }
-            } else {
-                document.getElementById("noAttachmentWarnindId").style.display = "block";
-            }
-        }
-    }
-    xhr.send();
-}
-
-function showAttachment2(id) {
+function showAttachment(id) {
     showWaitingDiv();
     var xhr = new XMLHttpRequest();
     xhr.open("GET", paymentsAttachmentPath + "?token=" + token + "&id=" + id, true);

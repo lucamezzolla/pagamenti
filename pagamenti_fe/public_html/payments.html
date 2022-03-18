@@ -132,21 +132,22 @@
                                 <input type="text" tabindex="10" class="form-control" id="paymentIvaCode" autocomplete="off" />
                             </div>
                             <div class="mb-3">
-                                <label id="paymentAttachmentLabel" for="paymentAttachment" class="form-label">Allegato</label>
-                                <input type="file" accept="image/*;capture=camera"  tabindex="12" class="form-control" onchange="loadingAttachment()" id="paymentAttachment" autocomplete="off">
+                                <label id="paymentAttachmentLabel" for="paymentAttachment" class="form-label"></label>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <input type="file" accept="image/*;capture=camera"  tabindex="12" class="form-control" onchange="loadingAttachment()" id="paymentAttachment" autocomplete="off">
+                                    <button type="button" tabindex="14" class="btn btn-danger" data-bs-dismiss="modal" id="paymentAttachmentModalRemoveButton" onclick="removeAttachment()" style="float: left; display: none; margin-right: 8px"> - </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style='display: unset !important'>
                     <div style='float: left'>
-                        <button type="button" tabindex="14" class="btn btn-danger" data-bs-dismiss="modal" id="paymentAttachmentModalRemoveButton" onclick="removeAttachment()" style="float: left; display: none; margin-right: 8px">Rimuovi allegato</button>
                         <button type="button" tabindex="14" class="btn btn-danger" data-bs-dismiss="modal" id="paymentModalRemoveButton" onclick="remove()" style="float: left; display: none">Rimuovi pagamento</button>
                     </div>
                     <div style='float: right'>
-                        <button tabindex="15" id="paymentShowAttachmentButton" class="btn btn-secondary" onclick="showAttachment()" style='float: left; margin-right: 8px'>Mostra l'attuale allegato</button>
-                        <button type="button" tabindex="16" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalEditButton" onclick="edit()" style="display: none; float:left">Salva</button>
-                        <button type="button" tabindex="17" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalInsertButton" onclick="insert()" style="display: none;float:left">Salva</button>
+                        <button type="button" tabindex="15" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalEditButton" onclick="edit()" style="display: none; float:left">Salva</button>
+                        <button type="button" tabindex="16" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalInsertButton" onclick="insert()" style="display: none;float:left">Salva</button>
                     </div>
                 </div>
             </div>
