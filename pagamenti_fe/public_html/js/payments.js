@@ -36,7 +36,7 @@ function serviceList() {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
             hideWaitingDiv();
             serviceArray = this.responseText;
-            document.getElementById("searchSelectService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un'anagrafica");
+            document.getElementById("searchSelectService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
         }
     }
     xhr.send();
@@ -304,7 +304,7 @@ function createTableInsertPayment(responseText) {
     var json = JSON.parse(responseText);
     for (var i = 0; i < json.length; i++) {
         let date = json[i].paymentDateTimeString.substring(0, json[i].paymentDateTimeString.length - 3);
-        text += "<tr value='luca'><td>" + json[i].service.name + "</td><td>" + date + "</td>"
+        text += "<tr><td>" + json[i].service.name + "</td><td>" + date + "</td>"
                 + "<td>" + json[i].quantity + "</td><td>" + json[i].price + "</td>"
                 + "<td>" + printEditPaymentButton(json[i].id) + "</td></tr>";
     }
