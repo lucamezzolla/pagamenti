@@ -205,11 +205,13 @@ function createTableInsertLoan(responseText) {
     let text = "";
     var json = JSON.parse(responseText);
     for (var i = 0; i < json.length; i++) {
+        var currency = json[i].currency.split("#");
+        console.log(currency);
         var total = json[i].total;
-        if(json[i].currency == "euro") total += "€";
-        if(json[i].currency == "dollaro") total += "$";
-        if(json[i].currency == "sterlina") total += "£";
-        if(json[i].currency == "real") total += "R$";
+        if(currency[1] == "euro") total += "€";
+        if(currency[1] == "dollaro") total += "$";
+        if(currency[1] == "sterlina") total += "£";
+        if(currency[1] == "real") total += "R$";
         text += "<tr><td>" + json[i].client.name + "</td><td>" + total + "</td>"
             + "<td>" + formatDate(json[i].dateLoan) + "</td><td>" + formatDate(json[i].dateExpiration) + "</td><td>"+printEditLoanButton(json[i].id)+"</td></tr>";
     }
