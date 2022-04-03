@@ -304,9 +304,15 @@ function createTableInsertPayment(responseText) {
     var json = JSON.parse(responseText);
     for (var i = 0; i < json.length; i++) {
         let date = json[i].paymentDateTimeString.substring(0, json[i].paymentDateTimeString.length - 3);
-        text += "<tr><td>" + json[i].service.name + "</td><td>" + date + "</td>"
-                + "<td>" + json[i].quantity + "</td><td>" + json[i].price + "</td>"
-                + "<td>" + printEditPaymentButton(json[i].id) + "</td></tr>";
+        text += "<tr>"
+                + "<td title='"+json[i].service.name+"' style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap'>" + json[i].service.name + "</td>"
+                + "<td title='"+date+"' style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap'>" + date + "</td>"
+                + "<td title='€ "+json[i].price+"' style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap'>€ " + json[i].price + "</td>"
+                + "<td title='"+json[i].description+"' style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 400px'>" + json[i].description + "</td>"
+                + "<td>" + printEditPaymentButton(json[i].id) + "</td>"
+                + "</tr>";
+        console.log(json[i]);
+        
     }
     return text;
 }
