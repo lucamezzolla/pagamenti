@@ -2,9 +2,11 @@ package cutalab.pagamenti;
 
 import cutalab.pagamenti.models.ClientEntity;
 import cutalab.pagamenti.models.LoanEntity;
+import cutalab.pagamenti.models.LoanReturnedEntity;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.ClientRepository;
 import cutalab.pagamenti.repositories.LoanRepository;
+import cutalab.pagamenti.repositories.ReturnedLoanRepository;
 import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,6 +38,9 @@ public class LoanController {
     
     @Autowired
     private LoanRepository loanRepository;
+    
+    @Autowired
+    private ReturnedLoanRepository returnedLoanRepository;
     
     private static DateTimeFormatter formatterList = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -158,6 +163,46 @@ public class LoanController {
             retval = true;                                                      //autorizzato        
         }
         return retval;
+    }
+    
+    @GetMapping("/rloans/list")
+    public ResponseEntity rloanList(@RequestParam String token, @RequestParam Integer id) {
+        if(!validate(token)) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+        List<LoanReturnedEntity> list = returnedLoanRepository.findByLoanIdOrderByDateDesc(id);
+        Iterator<LoanReturnedEntity> iterator = list.iterator();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    
+    @PostMapping("/rloans/create")
+    public ResponseEntity rloanCreate(
+            @RequestParam String token,
+            @RequestParam String loanId,
+            @RequestParam String total
+            ) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            if(total.isEmpty()) {
+                return new ResponseEntity("Errore. Tutti i campi sono richiesti.", HttpStatus.BAD_REQUEST);
+            }
+            LoanReturnedEntity l = new LoanReturnedEntity();
+            l.setDate(LocalDate.now());
+            l.setLoanId(Integer.valueOf(loanId));
+            l.setTotal(Double.valueOf(total));
+            returnedLoanRepository.save(l);
+            
+            LoanEntity ll = loanRepository.getById(Integer.valueOf(loanId));
+            ll.setTotalReturned(ll.getTotalReturned() + Double.valueOf(total));
+            loanRepository.save(ll);
+            
+            
+        } catch(IllegalArgumentException ex) {
+            return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

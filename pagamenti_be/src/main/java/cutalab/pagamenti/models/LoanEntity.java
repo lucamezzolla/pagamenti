@@ -26,6 +26,9 @@ public class LoanEntity implements Serializable {
     @Column(name="total")
     private Double total;
     
+    @Column(name="total_returned")
+    private Double totalReturned = 0.00;
+    
     @Column(name="currency")
     private String currency;
     
@@ -59,6 +62,14 @@ public class LoanEntity implements Serializable {
         this.total = total;
     }
 
+    public Double getTotalReturned() {
+        return totalReturned;
+    }
+
+    public void setTotalReturned(Double totalReturned) {
+        this.totalReturned = totalReturned;
+    }
+    
     public String getCurrency() {
         return currency;
     }

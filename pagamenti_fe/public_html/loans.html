@@ -46,10 +46,12 @@
                     <thead>
                         <tr>
                             <th scope="col">Concesso da</th>
-                            <th scope="col">Totale</th>
+                            <th scope="col">Totale concesso</th>
+                            <th scope="col">Totale restituito</th>
                             <th scope="col">Data prestito</th>
                             <th scope="col">Data scadenza</th>
-                            <th scope="col">
+                            <th scope="col" style="width: 45px"></th>
+                            <th scope="col" style="width: 45px">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loanModal" onclick="openLoanModal('new')" style="float: right">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
@@ -108,6 +110,35 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="loanModalRemoveButton" onclick="remove()" style="display: none">Rimuovi</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="loanModalEditButton" onclick="edit()" style="display: none">Salva</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="loanModalInsertButton" onclick="insert()" style="display: none">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="totalReturnedLoanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Totale restituito</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md">
+                        <input type="hidden" id="totalReturnedLoanId">
+                        <div class="mb-3">
+                            <label for="returned" class="form-label">Immetti la cifra restituita</label>
+                            <input type="number" step="0.01" id="returned" />
+                            <input type="button" class="btn btn-primary btn-sm" value="Salva" onclick="insertReturnedLoan()" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="rltable" class="form-label"></label>
+                            <div id="rltable"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
                 </div>
             </div>
         </div>

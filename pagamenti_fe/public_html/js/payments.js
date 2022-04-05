@@ -304,7 +304,7 @@ function createTableInsertPayment(responseText) {
     var json = JSON.parse(responseText);
     for (var i = 0; i < json.length; i++) {
         let date = json[i].paymentDateTimeString.substring(0, json[i].paymentDateTimeString.length - 3);
-        text += "<tr>"
+        text += "<tr style='vertical-align: middle'>"
                 + "<td title='"+json[i].service.name+"' style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap'>" + json[i].service.name + "</td>"
                 + "<td title='"+date+"' style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap'>" + date + "</td>"
                 + "<td title='€ "+json[i].price+"' style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap'>€ " + json[i].price + "</td>"
