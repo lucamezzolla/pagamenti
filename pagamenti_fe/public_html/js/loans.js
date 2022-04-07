@@ -210,9 +210,9 @@ function createTableInsertLoan(responseText) {
         var totalr = json[i].totalReturned;
         var totalReturnedColor = totalr < total ? "red" : "green";
         if(currency[1] == "euro") { total += "€"; totalr += "€" }
-        if(currency[1] == "dollaro") { total += "$"; totalr += "€" }
-        if(currency[1] == "sterlina") { total += "£"; totalr += "€" }
-        if(currency[1] == "real") { total += "R$"; totalr += "€" }
+        if(currency[1] == "dollaro") { total += "$"; totalr += "$" }
+        if(currency[1] == "sterlina") { total += "£"; totalr += "£" }
+        if(currency[1] == "real") { total += "R$"; totalr += "R$" }
         text += "<tr style='vertical-align: middle'><td>" + json[i].client.name + "</td><td>" + total + "</td><td style='color: "+totalReturnedColor+"; font-weight: bold'>" + totalr + "</td>"
             + "<td>" + formatDate(json[i].dateLoan) + "</td><td>" + formatDate(json[i].dateExpiration) + "</td>"
             + "<td>"+printTotalReturnedButton(json[i].id)+"</td><td>"+printEditLoanButton(json[i].id)+"</td></tr>";    
