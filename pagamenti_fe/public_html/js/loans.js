@@ -204,14 +204,14 @@ function createTableInsertLoan(responseText) {
     let text = "";
     var json = JSON.parse(responseText);
     for (var i = 0; i < json.length; i++) {
-        var currency = json[i].currency.split("#");
+        var currency = json[i].currency;
         var total = json[i].total;
         var totalr = json[i].totalReturned;
         var totalReturnedColor = totalr < total ? "red" : "green";
-        if(currency[1] == "euro") { total += "€"; totalr += "€" }
-        if(currency[1] == "dollaro") { total += "$"; totalr += "$" }
-        if(currency[1] == "sterlina") { total += "£"; totalr += "£" }
-        if(currency[1] == "real") { total += "R$"; totalr += "R$" }
+        if(currency == "euro") { total += "€"; totalr += "€" }
+        if(currency == "dollaro") { total += "$"; totalr += "$" }
+        if(currency == "sterlina") { total += "£"; totalr += "£" }
+        if(currency == "real") { total += "R$"; totalr += "R$" }
         text += "<tr style='vertical-align: middle'><td>" + json[i].client.name + "</td><td>" + total + "</td><td style='color: "+totalReturnedColor+"; font-weight: bold'>" + totalr + "</td>"
             + "<td>" + formatDate(json[i].dateLoan) + "</td><td>" + formatDate(json[i].dateExpiration) + "</td>"
             + "<td>"+printTotalReturnedButton(json[i].id)+"</td><td>"+printEditLoanButton(json[i].id)+"</td></tr>";    
