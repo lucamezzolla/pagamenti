@@ -253,6 +253,7 @@ function createSelectInsertLoan(array, optionZero) {
 function openReturnedLoanModal(id) {
     var xhr = new XMLHttpRequest();
     document.getElementById("totalReturnedLoanId").value = id;
+    document.getElementById("errorRloan").style.display = "none";
     xhr.open("GET", returnedLoansListPath + "?token=" + token + "&id=" + id, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", returnedLoansListPath);
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -318,8 +319,7 @@ function insertReturnedLoan() {
     var xhr = new XMLHttpRequest();
     var total = document.getElementById("returned").value;
     var loanId = document.getElementById("totalReturnedLoanId").value;
-    var successComponent = document.getElementById("success");
-    var errorComponent = document.getElementById("error");
+    var errorComponent = document.getElementById("errorRloan");
     xhr.open("POST", returnedLoansCreatePath, true);
     xhr.setRequestHeader("Access-Control-Allow-Origin", returnedLoansCreatePath);
     xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -333,15 +333,10 @@ function insertReturnedLoan() {
                 list(document.getElementById("searchSelectLoan").value); //aggiorna tabella dei prestiti
                 document.getElementById("returned").value = 0;
                 errorComponent.style.display = "none";
-                var successMessage = "Il record è stato inserito correttamente.";
-                successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
-                errorComponent.style.display = "none";
-                successComponent.style.display = "block";
             } else {
                 var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
                 errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
                 errorComponent.style.display = "block";
-                successComponent.style.display = "none";
             }
         }
     }
