@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReturnedLoanRepository extends JpaRepository<LoanReturnedEntity, Integer> {
     List<LoanReturnedEntity> findByLoanIdOrderByDateDesc(Integer id);
+    
 }

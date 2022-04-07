@@ -144,6 +144,11 @@ public class LoanController {
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
             }
             loanRepository.deleteById(Integer.valueOf(id));
+            List<LoanReturnedEntity> findByLoanIdOrderByDateDesc = returnedLoanRepository.findByLoanIdOrderByDateDesc(Integer.valueOf(id));
+            Iterator<LoanReturnedEntity> iterator = findByLoanIdOrderByDateDesc.iterator();
+            while(iterator.hasNext()) {
+                returnedLoanRepository.delete(iterator.next());
+            }
         } catch(Exception ex) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -198,6 +203,29 @@ public class LoanController {
             ll.setTotalReturned(ll.getTotalReturned() + Double.valueOf(total));
             loanRepository.save(ll);
             
+            
+        } catch(IllegalArgumentException ex) {
+            return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/rloans/delete")
+    public ResponseEntity rloanDelete(
+            @RequestParam String token,
+            @RequestParam String rloanId
+            ) {
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            LoanReturnedEntity l = returnedLoanRepository.getById(Integer.valueOf(rloanId));
+            returnedLoanRepository.delete(l);
+            
+            LoanEntity ll = loanRepository.getById(l.getLoanId());
+            Double newTotalReturnedLoan = ll.getTotalReturned() - l.getTotal();
+            ll.setTotalReturned(newTotalReturnedLoan);
+            loanRepository.save(ll);
             
         } catch(IllegalArgumentException ex) {
             return new ResponseEntity<>("Errore. Sono stati passati parametri inappropriati.", HttpStatus.BAD_REQUEST);

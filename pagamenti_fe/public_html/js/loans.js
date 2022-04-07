@@ -208,7 +208,7 @@ function createTableInsertLoan(responseText) {
         var currency = json[i].currency.split("#");
         var total = json[i].total;
         var totalr = json[i].totalReturned;
-        var totalReturnedColor = total != totalr ? "red" : "green";
+        var totalReturnedColor = totalr < total ? "red" : "green";
         if(currency[1] == "euro") { total += "€"; totalr += "€" }
         if(currency[1] == "dollaro") { total += "$"; totalr += "€" }
         if(currency[1] == "sterlina") { total += "£"; totalr += "€" }
@@ -262,9 +262,16 @@ function openReturnedLoanModal(id) {
             document.getElementById("rltable").innerHTML = "";
             var json = JSON.parse(this.responseText);
             if(json.length > 0) {
-                var text = "<table class='table table-striped'><thead><th>Data</th><th>Cifra restituita</th></thead>";
+                var text = "<table class='table table-striped'><thead><th style='width: 150px'>Data</th><th>Cifra restituita</th><th style='width: 50px'></th></thead>";
                 for (var i = 0; i < json.length; i++) {
-                    text += "<tr style='vertical-align: middle'><td>" + formatDate(json[i].date) + "</td><td>" + json[i].total + "</td></tr>";    
+                    text += "<tr style='vertical-align: middle'>"
+                        +"<td>" + formatDate(json[i].date) + "</td>"
+                        +"<td>" + json[i].total + "</td>"
+                        +"<td><button><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash' viewBox='0 0 16 16' onclick='removeReturnLoad("+json[i].id+")'>"
+                            +"<path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'/>"
+                            +"<path fill-rule='evenodd' d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'/>"
+                            +"</svg></button></td>"
+                        +"</tr>";    
                 }
                 text += "</table>";
                 document.getElementById("rltable").innerHTML = text;
@@ -339,4 +346,34 @@ function insertReturnedLoan() {
         }
     }
     xhr.send("token=" + token + "&loanId=" + loanId + "&total=" + total);  
+}
+
+function removeReturnLoad(id) {
+    if (confirmRemove()) {
+        showWaitingDiv();
+        var xhr = new XMLHttpRequest();
+        var successComponent = document.getElementById("success");
+        var errorComponent = document.getElementById("errorRloan");
+        var loanId = document.getElementById("totalReturnedLoanId").value;
+        xhr.open("DELETE", returnedLoansDeletePath + "?token=" + token + "&rloanId=" + id, true);
+        xhr.setRequestHeader("Access-Control-Allow-Origin", returnedLoansDeletePath);
+        xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+        xhr.setRequestHeader("Access-Control-Allow-Methods", "DELETE");
+        xhr.onreadystatechange = function () {
+            if (this.readyState === XMLHttpRequest.DONE) {
+                hideWaitingDiv();
+                if (this.status === 200) {
+                    errorComponent.innerHTML = "";
+                    openReturnedLoanModal(loanId);
+                    list(document.getElementById("searchSelectLoan").value);
+                } else {
+                    var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
+                    errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
+                    successComponent.style.display = "none";
+                    errorComponent.style.display = "block";
+                }
+            }
+        }
+        xhr.send();
+    }
 }
