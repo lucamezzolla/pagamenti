@@ -115,9 +115,8 @@ function view(id) {
             total.value = json.total;
             dateLoan.value = json.dateLoan;
             dateExpiration.value = json.dateExpiration;
-            client.options[json.client.id].selected = "true";   
-            var arrCurrency = json.currency.toString().split("#");
-            currency.options[arrCurrency[0]].selected = "true";
+            client.value = json.client.id;
+            currency.value = json.currency;
         }
     }
     xhr.send();
