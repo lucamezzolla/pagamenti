@@ -77,7 +77,7 @@ function insert() {
         if (this.readyState === XMLHttpRequest.DONE) {
             hideWaitingDiv();
             if (this.status === 200) {
-                document.getElementById("searchSelectLoan").options[clientId].selected = "true";
+                document.getElementById("searchSelectLoan").value = clientId;
                 list(document.getElementById("searchSelectLoan").value);
                 errorComponent.style.display = "none";
                 var successMessage = "Il record è stato inserito correttamente.";
