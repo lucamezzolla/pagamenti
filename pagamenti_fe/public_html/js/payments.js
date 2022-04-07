@@ -179,8 +179,8 @@ function view(id) {
             ivaCode.value = json.ivaCode;
             var service = document.getElementById("paymentService");
             var client = document.getElementById("paymentClient");
-            service.options[json.service.id].selected = "true";
-            client.options[json.client.id].selected = "true";
+            service.value = json.service.id;
+            client.value = json.client.id;
         }
     }
     xhr.send();
