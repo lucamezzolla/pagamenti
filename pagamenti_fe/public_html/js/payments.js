@@ -1,3 +1,27 @@
+function updateGraphic() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", userByTokenPath + "/?token=" + token, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", userByTokenPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                var user = JSON.parse(this.responseText);
+                if(!user.admin) {
+                    document.getElementById("newButtonCol").innerHTML = "";
+                    document.getElementById("modal-footer").innerHTML = "";
+                    document.getElementById("paymentAttachmentModalRemoveDiv").innerHTML = "";
+                }
+            } else if (this.readyState === 4 && this.status !== 200) {
+                logout();
+            }
+        }
+    }
+    xhr.send();
+}
+
 document.getElementById("paymentTableDivId").style.display = "none";
 document.getElementById("noDataWarnindId").style.display = "block";
 
@@ -311,8 +335,6 @@ function createTableInsertPayment(responseText) {
                 + "<td title='"+json[i].description+"' style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 400px'>" + json[i].description + "</td>"
                 + "<td>" + printEditPaymentButton(json[i].id) + "</td>"
                 + "</tr>";
-        console.log(json[i]);
-        
     }
     return text;
 }
@@ -389,7 +411,7 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentService").innerHTML = createSelectInsertPayment(serviceArray, "Scegli un servizio");
         view(id);
     }
-
+    updateGraphic();
 }
 
 function showAttachment(id) {
