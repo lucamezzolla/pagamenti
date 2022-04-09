@@ -1,4 +1,3 @@
-updateGraphic1();
 document.getElementById("loanTableDivId").style.display = "none";
 document.getElementById("noDataWarnindId").style.display = "block";
 
@@ -361,7 +360,7 @@ function openLoanModal(title, id) {
         document.getElementById("loanClient").innerHTML = createSelectInsertLoan(clientArray, "Scegli un'anagrafica");
         view(id);
     }
-    
+    updateGraphic1();
 }
 
 function insertReturnedLoan() {
