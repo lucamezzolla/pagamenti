@@ -261,8 +261,11 @@ function openClientModal(title, id) {
     if (title == "edit") {
         view(id);
         document.getElementById("clientModalTitle").innerHTML = "Modifica anagrafica";
-        document.getElementById("clientModalRemoveButton").style.display = "block";
-        document.getElementById("clientModalEditButton").style.display = "block";
-        document.getElementById("clientModalInsertButton").style.display = "none";
+        var removeButton = document.getElementById("clientModalRemoveButton");
+        var editButton = document.getElementById("clientModalEditButton");
+        var insertButton = document.getElementById("clientModalInsertButton");
+        if(removeButton !== null) document.getElementById("clientModalRemoveButton").style.display = "block";
+        if(editButton !== null) document.getElementById("clientModalEditButton").style.display = "block";
+        if(insertButton !== null) document.getElementById("clientModalInsertButton").style.display = "none";
     }
 }

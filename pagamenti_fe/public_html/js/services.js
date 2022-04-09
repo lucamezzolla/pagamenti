@@ -220,8 +220,11 @@ function openServiceModal(title, id) {
     if (title == "edit") {
         view(id);
         document.getElementById("serviceModalTitle").innerHTML = "Modifica servizio";
-        document.getElementById("serviceModalRemoveButton").style.display = "block";
-        document.getElementById("serviceModalEditButton").style.display = "block";
-        document.getElementById("serviceModalInsertButton").style.display = "none";
+        var removeButton = document.getElementById("serviceModalRemoveButton");
+        var editButton = document.getElementById("serviceModalEditButton");
+        var insertButton = document.getElementById("serviceModalInsertButton");
+        if(removeButton !== null) document.getElementById("serviceModalRemoveButton").style.display = "block";
+        if(editButton !== null) document.getElementById("serviceModalEditButton").style.display = "block";
+        if(insertButton !== null) document.getElementById("serviceModalInsertButton").style.display = "none";
     }
 }
