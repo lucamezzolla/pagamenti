@@ -1,3 +1,5 @@
+updateGraphic1();
+
 document.getElementById("loanTableDivId").style.display = "none";
 document.getElementById("noDataWarnindId").style.display = "block";
 
@@ -351,10 +353,12 @@ function openLoanModal(title, id) {
     if (title == "edit") {
         isNew = 0;
         document.getElementById("loanModalTitle").innerHTML = "Modifica prestito";
-        document.getElementById("loanModalRemoveButton").style.display = "block";
-        document.getElementById("loanModalRemoveButton").style.display = "block";
-        document.getElementById("loanModalEditButton").style.display = "block";
-        document.getElementById("loanModalInsertButton").style.display = "none";
+        var removeButton = document.getElementById("loanModalRemoveButton");
+        var editButton = document.getElementById("loanModalEditButton");
+        var insertButton = document.getElementById("loanModalInsertButton");
+        if(removeButton !== null) document.getElementById("loanModalRemoveButton").style.display = "block";
+        if(editButton !== null) document.getElementById("loanModalEditButton").style.display = "block";
+        if(insertButton !== null) document.getElementById("loanModalInsertButton").style.display = "none";
         document.getElementById("success").style.display = "none";
         document.getElementById("error").style.display = "none";
         document.getElementById("loanClient").innerHTML = createSelectInsertLoan(clientArray, "Scegli un'anagrafica");

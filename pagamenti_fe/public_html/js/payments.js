@@ -1,3 +1,5 @@
+updateGraphic();
+
 function updateGraphic() {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", userByTokenPath + "/?token=" + token, true);
@@ -400,11 +402,14 @@ function openPaymentModal(title, id) {
         document.getElementById("paymentAttachmentLabel").innerHTML = "Modifica allegato";
         document.getElementById("paymentModalTitle").innerHTML = "Modifica pagamento";
         document.getElementById("noAttachmentWarnindId").style.display = "none";
-        document.getElementById("paymentModalRemoveButton").style.display = "block";
-        document.getElementById("paymentModalRemoveButton").style.display = "block";
-        document.getElementById("paymentModalEditButton").style.display = "block";
-        document.getElementById("paymentModalInsertButton").style.display = "none";
-        document.getElementById("paymentAttachmentModalRemoveButton").style.display = "block";
+        var removeButton = document.getElementById("paymentModalRemoveButton");
+        var editButton = document.getElementById("paymentModalEditButton");
+        var insertButton = document.getElementById("paymentModalInsertButton");
+        var removeAttachmentButton = document.getElementById("paymentAttachmentModalRemoveButton");
+        if(removeButton !== null) document.getElementById("paymentModalRemoveButton").style.display = "block";
+        if(editButton !== null) document.getElementById("paymentModalEditButton").style.display = "block";
+        if(insertButton !== null) document.getElementById("paymentModalInsertButton").style.display = "none";
+        if(removeAttachmentButton !== null) document.getElementById("paymentAttachmentModalRemoveButton").style.display = "block";
         document.getElementById("success").style.display = "none";
         document.getElementById("error").style.display = "none";
         document.getElementById("paymentClient").innerHTML = createSelectInsertPayment(clientArray, "Scegli un'anagrafica");
