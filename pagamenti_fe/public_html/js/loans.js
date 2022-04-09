@@ -1,3 +1,4 @@
+updateGraphic1();
 document.getElementById("loanTableDivId").style.display = "none";
 document.getElementById("noDataWarnindId").style.display = "block";
 
@@ -18,6 +19,55 @@ function clientList() {
             hideWaitingDiv();
             clientArray = this.responseText;
             document.getElementById("searchSelectLoan").innerHTML = createSelectInsertLoan(clientArray, "Scegli un'anagrafica");
+        }
+    }
+    xhr.send();
+}
+
+function updateGraphic1() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", userByTokenPath + "/?token=" + token, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", userByTokenPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                var user = JSON.parse(this.responseText);
+                if(!user.admin) {
+                    document.getElementById("newButtonCol").innerHTML = "";
+                    document.getElementById("modal-footer").innerHTML = "";
+                }
+            } else if (this.readyState === 4 && this.status !== 200) {
+                logout();
+            }
+        }
+    }
+    xhr.send();
+}
+
+function updateGraphic2() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", userByTokenPath + "/?token=" + token, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", userByTokenPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                var user = JSON.parse(this.responseText);
+                if(!user.admin) {
+                    document.getElementById("returnedTotalDiv").innerHTML = "";
+                    var trashColumns = document.getElementsByClassName("returnedTotalTrash");
+                    for (var i = 0; i < trashColumns.length; i++) {
+                        trashColumns.item(i).innerHTML = "";
+                    }
+                }
+            } else if (this.readyState === 4 && this.status !== 200) {
+                logout();
+            }
         }
     }
     xhr.send();
@@ -267,7 +317,7 @@ function openReturnedLoanModal(id) {
                     text += "<tr style='vertical-align: middle'>"
                         +"<td>" + formatDate(json[i].date) + "</td>"
                         +"<td>" + json[i].total + "</td>"
-                        +"<td><button><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash' viewBox='0 0 16 16' onclick='removeReturnLoad("+json[i].id+")'>"
+                        +"<td class='returnedTotalTrash'><button><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash' viewBox='0 0 16 16' onclick='removeReturnLoad("+json[i].id+")'>"
                             +"<path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'/>"
                             +"<path fill-rule='evenodd' d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'/>"
                             +"</svg></button></td>"
@@ -276,6 +326,7 @@ function openReturnedLoanModal(id) {
                 text += "</table>";
                 document.getElementById("rltable").innerHTML = text;
             }
+            updateGraphic2();
         }
     }
     xhr.send();

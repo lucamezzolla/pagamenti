@@ -51,7 +51,7 @@
                             <th scope="col">Data prestito</th>
                             <th scope="col">Data scadenza</th>
                             <th scope="col" style="width: 45px"></th>
-                            <th scope="col" style="width: 45px">
+                            <th scope="col" id="newButtonCol" style="width: 45px">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loanModal" onclick="openLoanModal('new')" style="float: right">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
@@ -105,8 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <div class="modal-footer" id="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="loanModalRemoveButton" onclick="remove()" style="display: none">Rimuovi</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="loanModalEditButton" onclick="edit()" style="display: none">Salva</button>
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="loanModalInsertButton" onclick="insert()" style="display: none">Salva</button>
@@ -126,7 +125,7 @@
                 <div class="modal-body">
                     <div class="col-md">
                         <input type="hidden" id="totalReturnedLoanId">
-                        <div class="mb-3">
+                        <div class="mb-3" id="returnedTotalDiv">
                             <div id="errorRloan" style="display: none"></div>
                             <label for="returned" class="form-label">Immetti la cifra restituita</label>
                             <input type="number" step="0.01" id="returned" />

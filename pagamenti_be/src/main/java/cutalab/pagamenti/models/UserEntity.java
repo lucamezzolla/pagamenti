@@ -1,5 +1,7 @@
 package cutalab.pagamenti.models;
 
+import cutalab.pagamenti.CryptoUtil;
+import cutalab.pagamenti.repositories.UserRepository;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,11 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name="users")
 public class UserEntity implements Serializable {
-
+    
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
@@ -24,6 +27,9 @@ public class UserEntity implements Serializable {
     
     @Column(name="password", nullable=false) 
     private String password;
+    
+    @Column(name="admin", nullable=false, columnDefinition="tinyint(1) default 0")
+    private byte admin;
 
     public Integer getId() {
         return id;
@@ -53,6 +59,14 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
+    public boolean isAdmin() {
+        return admin == (byte) 1 ? true : false;
+    }
+
+    public void setAdmin(byte admin) {
+        this.admin = admin;
+    }
+    
     @Override
     public String toString() {
         return "UserEntity{" + "name=" + name + ", email=" + email + "}";

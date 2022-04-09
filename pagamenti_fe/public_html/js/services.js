@@ -1,4 +1,28 @@
+updateGraphic();
 list();
+
+function updateGraphic() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", userByTokenPath + "/?token=" + token, true);
+    xhr.setRequestHeader("Access-Control-Allow-Origin", userByTokenPath);
+    xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    xhr.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            hideWaitingDiv();
+            if (this.status === 200) {
+                var user = JSON.parse(this.responseText);
+                if(!user.admin) {
+                    document.getElementById("newButtonCol").innerHTML = "";
+                    document.getElementById("modal-footer").innerHTML = "";
+                }
+            } else if (this.readyState === 4 && this.status !== 200) {
+                logout();
+            }
+        }
+    }
+    xhr.send();
+}
 
 function list() {
     showWaitingDiv();
@@ -162,7 +186,6 @@ function remove() {
 function createTableInsertService(responseText) {
     let text = "";
     var json = JSON.parse(responseText);
-    console.log(json);
     for (var i = 0; i < json.length; i++) {
         text += "<tr><td>" + json[i].name + "</td><td>" + json[i].address + "</td>"
                 + "<td>" + json[i].fiscal_Code + "</td>" + "<td>" + json[i].piva + "</td>"

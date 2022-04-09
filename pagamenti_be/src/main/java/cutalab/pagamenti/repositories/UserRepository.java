@@ -15,6 +15,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     List<UserListReduced> getReducedList();
     
     @Query(value="select u.id, u.name, u.email from users u where u.id = ?1", nativeQuery=true)
+    List<UserListReduced> getReducedListOneUser(Integer id);
+    
+    @Query(value="select u.id, u.name, u.email from users u where u.id = ?1", nativeQuery=true)
     UserReduced getReducedUser(Integer id);
     
 }

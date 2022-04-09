@@ -1,6 +1,5 @@
 package cutalab.pagamenti;
 
-import cutalab.pagamenti.models.ServiceEntity;
 import cutalab.pagamenti.models.UserEntity;
 import cutalab.pagamenti.repositories.UserRepository;
 import java.time.LocalDateTime;
@@ -29,10 +28,16 @@ public class UserController {
 
     @GetMapping("/users/list")
     public ResponseEntity usersList(@RequestParam String token) {
-        if (!validate(token)) {
+        if(!validate(token)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        List<UserListReduced> list = userRepository.getReducedList();
+        UserEntity user = getUserByToken(token);
+        List<UserListReduced> list = null;
+        if(user.isAdmin()) {
+            list = userRepository.getReducedList();
+        } else {
+            list = userRepository.getReducedListOneUser(user.getId());
+        }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -124,6 +129,33 @@ public class UserController {
             retval = true;                                                      //autorizzato        
         }
         return retval;
+    }
+    
+    private UserEntity getUserByToken(String token) {
+        String tokenDecrypted = CryptoUtil.decrypt(token);
+        String[] split = tokenDecrypted.split("cuta");
+        Integer userId = Integer.valueOf(split[1]);
+        UserEntity user = userRepository.getById(userId);
+        return user;
+    }
+    
+    
+    @GetMapping("/users/get-user-by-token")
+    public ResponseEntity getUserByTokenPublic(@RequestParam String token) {
+        UserEntity user = null;
+        try {
+            if(!validate(token)) {
+                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            }
+            String tokenDecrypted = CryptoUtil.decrypt(token);
+            String[] split = tokenDecrypted.split("cuta");
+            Integer userId = Integer.valueOf(split[1]);
+            user = userRepository.getById(userId);
+            user.setPassword("###");
+        } catch(Exception ex) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 }
