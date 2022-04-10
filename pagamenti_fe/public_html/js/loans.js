@@ -39,6 +39,11 @@ function updateGraphic1() {
                 if(!user.admin) {
                     document.getElementById("newButtonCol").innerHTML = "";
                     document.getElementById("modal-footer").innerHTML = "";
+                    document.getElementById("loanClient").disabled = true;
+                    document.getElementById("loanDate").disabled = true;
+                    document.getElementById("loanExpirationDate").disabled = true;
+                    document.getElementById("loanTotal").disabled = true;
+                    document.getElementById("loanCurrency").disabled = true;
                 }
             } else if (this.readyState === 4 && this.status !== 200) {
                 logout();
@@ -352,7 +357,7 @@ function openLoanModal(title, id) {
     }
     if (title == "edit") {
         isNew = 0;
-        document.getElementById("loanModalTitle").innerHTML = "Modifica prestito";
+        document.getElementById("loanModalTitle").innerHTML = "Prestito";
         var removeButton = document.getElementById("loanModalRemoveButton");
         var editButton = document.getElementById("loanModalEditButton");
         var insertButton = document.getElementById("loanModalInsertButton");

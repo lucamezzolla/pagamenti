@@ -15,6 +15,18 @@ function updateGraphic() {
                     document.getElementById("newButtonCol").innerHTML = "";
                     document.getElementById("modal-footer").innerHTML = "";
                     document.getElementById("paymentAttachmentModalRemoveDiv").innerHTML = "";
+                    document.getElementById("paymentService").disabled = true;
+                    document.getElementById("paymentCode").disabled = true;
+                    document.getElementById("paymentReceipt").disabled = true;
+                    document.getElementById("paymentClient").disabled = true;
+                    document.getElementById("paymentDate").disabled = true;
+                    document.getElementById("paymentDescription").disabled = true;
+                    document.getElementById("paymentInvoice").disabled = true;
+                    document.getElementById("paymentPrice").disabled = true;
+                    document.getElementById("paymentQty").disabled = true;
+                    document.getElementById("paymentIva").disabled = true;
+                    document.getElementById("paymentIvaCode").disabled = true;
+                    document.getElementById("paymentAttachment").disabled = true;
                 }
             } else if (this.readyState === 4 && this.status !== 200) {
                 logout();
@@ -399,8 +411,8 @@ function openPaymentModal(title, id) {
         isNew = 0;
         attachment = "";
         document.getElementById("paymentAttachment").value = "";
-        document.getElementById("paymentAttachmentLabel").innerHTML = "Modifica allegato";
-        document.getElementById("paymentModalTitle").innerHTML = "Modifica pagamento";
+        document.getElementById("paymentAttachmentLabel").innerHTML = "allegato";
+        document.getElementById("paymentModalTitle").innerHTML = "Pagamento";
         document.getElementById("noAttachmentWarnindId").style.display = "none";
         var removeButton = document.getElementById("paymentModalRemoveButton");
         var editButton = document.getElementById("paymentModalEditButton");

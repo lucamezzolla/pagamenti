@@ -15,6 +15,11 @@ function updateGraphic() {
                 if(!user.admin) {
                     document.getElementById("newButtonCol").innerHTML = "";
                     document.getElementById("modal-footer").innerHTML = "";
+                    document.getElementById("serviceName").disabled = true;
+                    document.getElementById("serviceFiscalCode").disabled = true;
+                    document.getElementById("serviceAddress").disabled = true;
+                    document.getElementById("servicePiva").disabled = true;
+                    document.getElementById("serviceDescription").disabled = true;
                 }
             } else if (this.readyState === 4 && this.status !== 200) {
                 logout();
@@ -219,7 +224,7 @@ function openServiceModal(title, id) {
     }
     if (title == "edit") {
         view(id);
-        document.getElementById("serviceModalTitle").innerHTML = "Modifica servizio";
+        document.getElementById("serviceModalTitle").innerHTML = "Servizio";
         var removeButton = document.getElementById("serviceModalRemoveButton");
         var editButton = document.getElementById("serviceModalEditButton");
         var insertButton = document.getElementById("serviceModalInsertButton");

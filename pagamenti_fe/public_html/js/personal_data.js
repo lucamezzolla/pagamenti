@@ -15,6 +15,18 @@ function updateGraphic() {
                 if(!user.admin) {
                     document.getElementById("newButtonCol").innerHTML = "";
                     document.getElementById("modal-footer").innerHTML = "";
+                    document.getElementById("clientName").disabled = true;
+                    document.getElementById("clientCap").disabled = true;
+                    document.getElementById("clientState").disabled = true;
+                    document.getElementById("clientFiscalCode").disabled = true;
+                    document.getElementById("clientPhone").disabled = true;
+                    document.getElementById("clientEmail").disabled = true;
+                    document.getElementById("clientAddress").disabled = true;
+                    document.getElementById("clientCity").disabled = true;
+                    document.getElementById("clientCountry").disabled = true;
+                    document.getElementById("clientPiva").disabled = true;
+                    document.getElementById("clientCell").disabled = true;
+                    document.getElementById("clientCode").disabled = true;
                 }
             } else if (this.readyState === 4 && this.status !== 200) {
                 logout();
@@ -260,7 +272,7 @@ function openClientModal(title, id) {
     }
     if (title == "edit") {
         view(id);
-        document.getElementById("clientModalTitle").innerHTML = "Modifica anagrafica";
+        document.getElementById("clientModalTitle").innerHTML = "Anagrafica";
         var removeButton = document.getElementById("clientModalRemoveButton");
         var editButton = document.getElementById("clientModalEditButton");
         var insertButton = document.getElementById("clientModalInsertButton");
