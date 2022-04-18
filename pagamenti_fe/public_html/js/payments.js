@@ -37,7 +37,11 @@ function updateGraphic() {
 }
 
 document.getElementById("paymentTableDivId").style.display = "none";
-document.getElementById("noDataWarnindId").style.display = "block";
+document.getElementById("noDataWarnindId").style.display = "none";
+
+var year = new Date().getFullYear();
+document.getElementById("searchFrom").value = year+"-01-01";
+document.getElementById("searchTo").value = year+"-12-31";
 
 clientList();
 serviceList();
@@ -80,14 +84,14 @@ function serviceList() {
     xhr.send();
 }
 
-function list(id) {
+function list(id, from, to) {
     document.getElementById("noAttachmentWarnindId").style.display = "none";
     document.getElementById("success").style.display = "none";
     document.getElementById("error").style.display = "none";
     if (id > 0) {
         showWaitingDiv();
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", paymentsListPath + "/?token=" + token + "&id=" + id, true);
+        xhr.open("GET", paymentsListPath + "/?token=" + token + "&id=" + id + "&from=" + from + "&to=" + to, true);
         xhr.setRequestHeader("Access-Control-Allow-Origin", paymentsListPath);
         xhr.setRequestHeader("Access-Control-Allow-Headers", "Content-Type");
         xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
