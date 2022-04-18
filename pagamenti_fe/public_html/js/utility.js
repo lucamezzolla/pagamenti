@@ -29,6 +29,15 @@ var usersListPath = beUrl+"users/list";
 var usersViewPath = beUrl+"users/view";
 var usersUpdatePath = beUrl+"users/update";
 var usersDeletePath = beUrl+"users/delete";
+var loansCreatePath = beUrl+"loans/create";
+var loansListPath = beUrl+"loans/list";
+var loansViewPath = beUrl+"loans/view";
+var loansUpdatePath = beUrl+"loans/update";
+var loansDeletePath = beUrl+"loans/delete";
+var returnedLoansListPath = beUrl+"rloans/list";
+var returnedLoansCreatePath = beUrl+"rloans/create";
+var returnedLoansDeletePath = beUrl+"rloans/delete";
+var userByTokenPath = beUrl+"users/get-user-by-token";
 
 //frontend path
 var feUrl = "http://localhost:8383/pagamenti_fe/";
