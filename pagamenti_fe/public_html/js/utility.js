@@ -2,7 +2,7 @@ var token = localStorage.getItem("token");
 var logged = token !== null;
 
 //backend paths
-var beUrl = "http://localhost:8080/";
+var beUrl = "https://www.lucamezzolla.it:8400/";
 var signInPath = beUrl+"signin";
 var signUpPath = beUrl+"signup";
 var validatePath = beUrl+"validate";
@@ -40,7 +40,7 @@ var returnedLoansDeletePath = beUrl+"rloans/delete";
 var userByTokenPath = beUrl+"users/get-user-by-token";
 
 //frontend path
-var feUrl = "http://localhost:8383/pagamenti_fe/";
+var feUrl = "https://www.lucamezzolla.it/pagamenti/";
 var indexPath = feUrl + "index.html";
 var signInFePath = feUrl + "signin.html";
 var signUpFePath = feUrl + "signup.html";
