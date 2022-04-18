@@ -411,7 +411,7 @@ function openPaymentModal(title, id) {
         isNew = 0;
         attachment = "";
         document.getElementById("paymentAttachment").value = "";
-        document.getElementById("paymentAttachmentLabel").innerHTML = "allegato";
+        document.getElementById("paymentAttachmentLabel").innerHTML = "Allegato";
         document.getElementById("paymentModalTitle").innerHTML = "Pagamento";
         document.getElementById("noAttachmentWarnindId").style.display = "none";
         var removeButton = document.getElementById("paymentModalRemoveButton");
