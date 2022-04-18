@@ -4,6 +4,7 @@ public interface ClientListReduced {
     Integer getId();
     String getName();
     String getFiscal_Code();
-    String getPiva();
+    String getCity();
     String getState();
+    String getCountry();
 }

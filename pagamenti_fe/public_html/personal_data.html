@@ -43,8 +43,9 @@
                         <tr>
                             <th scope="col">Nome</th>
                             <th scope="col">Codice fiscale</th>
-                            <th scope="col">Partita Iva</th>
+                            <th scope="col">Citt&agrave;</th>
                             <th scope="col">Provincia</th>
+                            <th scope="col">Stato</th>
                             <th scope="col" id="newButtonCol">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clientModal" onclick="openClientModal('new')" style="float: right">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
@@ -74,7 +75,7 @@
                         <div class="col-md">
                             <input type="hidden" id="clientId">
                             <div class="mb-3">
-                                <label for="clientName" class="form-label">Nome</label>
+                                <label for="clientName" class="form-label">Nome *</label>
                                 <input type="text" tabindex="1" class="form-control" id="clientName" autocomplete="off" />
                             </div>
                             <div class="mb-3">
@@ -86,7 +87,7 @@
                                 <input tabindex="5" type="text" class="form-control" id="clientState" autocomplete="off" />
                             </div>
                             <div class="mb-3">
-                                <label for="clientFiscalCode" class="form-label">Codice fiscale</label>
+                                <label for="clientFiscalCode" class="form-label">Codice fiscale *</label>
                                 <input tabindex="7" type="text" class="form-control" id="clientFiscalCode" autocomplete="off" />
                             </div>
                             <div class="mb-3">

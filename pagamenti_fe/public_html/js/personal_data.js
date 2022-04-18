@@ -233,8 +233,13 @@ function createTableInsertClient(responseText) {
     let text = "";
     var json = JSON.parse(responseText);
     for (var i = 0; i < json.length; i++) {
-        text += "<tr><td>" + json[i].name + "</td><td>" + json[i].fiscal_Code + "</td>"
-                + "<td>" + json[i].piva + "</td><td>" + json[i].state + "</td>"
+        var name = json[i].name !== null ? json[i].name : "";
+        var fiscalCode = json[i].fiscal_Code !== null ? json[i].fiscal_Code : "";
+        var city = json[i].city !== null ? json[i].city : "";
+        var state = json[i].state !== null ? json[i].state : "";
+        var country = json[i].country !== null ? json[i].country : "";
+        text += "<tr><td>" + name + "</td><td>" + fiscalCode + "</td>"
+                + "<td>" + city + "</td><td>" + state + "</td><td>" + country + "</td>"
                 + "<td>" + printEditClientButton(json[i].id) + "</td></tr>";
     }
     return text;
