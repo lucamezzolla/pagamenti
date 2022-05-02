@@ -151,7 +151,7 @@ function insert() {
                 successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
                 successComponent.style.display = "block";
                 errorComponent.style.display = "none";
-                list(document.getElementById("searchSelectService").value);
+                list(document.getElementById("searchSelectService").value, document.getElementById("searchFrom").value, document.getElementById("searchTo").value);
             } else {
                 var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
                 errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";
@@ -261,7 +261,7 @@ function edit() {
                 successComponent.innerHTML = "<div class='alert alert-success' role='alert' style='text-align: left'>" + successMessage + "</div>";
                 errorComponent.style.display = "none";
                 successComponent.style.display = "block";
-                list(document.getElementById("searchSelectService").value);
+                list(document.getElementById("searchSelectService").value, document.getElementById("searchFrom").value, document.getElementById("searchTo").value);
             } else {
                 var errorMessage = xhr.responseText.includes("Errore.") ? xhr.responseText : "Errore. La richiesta non è andata buon fine.";
                 errorComponent.innerHTML = "<div class='alert alert-danger' role='alert' style='text-align: left'>" + errorMessage + "</div>";

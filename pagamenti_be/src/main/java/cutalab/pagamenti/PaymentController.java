@@ -131,9 +131,6 @@ public class PaymentController {
             if(Integer.valueOf(clientId) <= 0 || Integer.valueOf(serviceId) <= 0) {
                 return new ResponseEntity("Errore. I campi servizio e anagrafica sono richiesti.", HttpStatus.BAD_REQUEST);
             }
-            if(iva.isEmpty()) {
-                iva = "00000000000";
-            }
             ClientEntity c = clientRepository.getById(Integer.valueOf(clientId));
             ServiceEntity s = serviceRepository.getById(Integer.valueOf(serviceId));
             PaymentEntity p = new PaymentEntity();
@@ -192,9 +189,6 @@ public class PaymentController {
             }
             if(Integer.valueOf(clientId) <= 0 || Integer.valueOf(serviceId) <= 0) {
                 return new ResponseEntity("Errore. I campi servizio e anagrafica sono richiesti.", HttpStatus.BAD_REQUEST);
-            }
-            if(iva.isEmpty()) {
-                iva = "00000000000";
             }
             ClientEntity c = clientRepository.getById(Integer.valueOf(clientId));
             ServiceEntity s = serviceRepository.getById(Integer.valueOf(serviceId));
