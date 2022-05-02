@@ -26,7 +26,7 @@
                     <div class="mb-3">
                         <button type="button" class="btn btn-link" title="Torna indietro" style="float: left" onclick="history.back()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+                            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
                             </svg>
                         </button>
                     </div>
@@ -99,7 +99,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="paymentModal">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -128,11 +128,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="paymentIva" class="form-label">IVA</label>
-                                <input type="text" tabindex="9" class="form-control" id="paymentIva" autocomplete="off" />
+                                <input type="text" tabindex="10" class="form-control" id="paymentIva" autocomplete="off" />
                             </div>
                             <div class="mb-3">
                                 <label for="paymentClient" class="form-label">Anagrafica *</label>
-                                <select tabindex="11" id="paymentClient" class="form-select" aria-label="client-select"></select>
+                                <select tabindex="12" id="paymentClient" class="form-select" aria-label="client-select"></select>
                             </div>
                         </div>
                         <div class="col-md">
@@ -149,17 +149,20 @@
                                 <input type="text" tabindex="6" class="form-control" id="paymentInvoice" autocomplete="off" />
                             </div>
                             <div class="mb-3">
-                                <label for="paymentPrice" class="form-label">Prezzo *</label>
-                                <input type="number" min="0.00" step="0.01" tabindex="8" class="form-control" id="paymentPrice" autocomplete="off" />
+                                <label for="paymentPrice" class="form-label">Prezzo (totale) *</label>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <input type="number" min="0.00" step="0.01" tabindex="8" class="form-control" id="paymentPrice" autocomplete="off" style="width: 90%; float: left" />
+                                    <a tabindex="9" class="btn btn-primary" id="paymentPaymentComponents" data-bs-toggle="modal" href="#paymentModalPaymentComponents" style="width: 10%; float: left"> + </a>
+                                </div>
                             </div>
                             <div class="mb-3">
                                 <label for="paymentIvaCode" class="form-label">Codice IVA</label>
-                                <input type="text" tabindex="10" class="form-control" id="paymentIvaCode" autocomplete="off" />
+                                <input type="text" tabindex="11" class="form-control" id="paymentIvaCode" autocomplete="off" />
                             </div>
                             <div class="mb-3">
                                 <label id="paymentAttachmentLabel" for="paymentAttachment" class="form-label"></label>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <input type="file" accept="image/*;capture=camera"  tabindex="12" class="form-control" onchange="loadingAttachment()" id="paymentAttachment" autocomplete="off">
+                                    <input type="file" accept="image/*;capture=camera"  tabindex="13" class="form-control" onchange="loadingAttachment()" id="paymentAttachment" autocomplete="off">
                                     <div id="paymentAttachmentModalRemoveDiv"><button type="button" tabindex="14" class="btn btn-danger" data-bs-dismiss="modal" id="paymentAttachmentModalRemoveButton" onclick="removeAttachment()" style="float: left; display: none; margin-right: 8px"> - </button></div>
                                 </div>
                             </div>
@@ -174,6 +177,31 @@
                         <button type="button" tabindex="15" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalEditButton" onclick="edit()" style="display: none; float:left">Salva</button>
                         <button type="button" tabindex="16" class="btn btn-primary" data-bs-dismiss="modal" id="paymentModalInsertButton" onclick="insert()" style="display: none;float:left">Salva</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="paymentModalPaymentComponents" data-bs-backdrop="static">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md">   
+                        <div class="mb-3">
+
+                        </div>
+                        <div class="mb-3">
+                            <a class="btn btn-primary" data-bs-toggle="modal" href="#paymentModal">Torna indietro</a> 
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    
                 </div>
             </div>
         </div>
